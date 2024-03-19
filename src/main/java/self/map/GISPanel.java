@@ -1,6 +1,6 @@
-package org.example.application.map;
+package self.map;
 
-import org.example.application.util.ApplicationMouseAdapter;
+import self.application.ApplicationMouseAdapter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -15,18 +15,14 @@ public class GISPanel extends JXMapViewer {
     private ApplicationMouseAdapter mouseAdapter;
     private CompoundPainter<JXMapViewer> painter;
 
-    /**
-     * Метод, создающий внешнее окружение GIS панели
-     * Вызывается после инициализации сценария, предполагается, что 1 раз.
-     */
-    public void initApplicationComponents() {
-        /* Mouse components */
+    public GISPanel() {
         this.mouseAdapter = new ApplicationMouseAdapter(this);
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
         addMouseWheelListener(mouseAdapter);
 
-        /* Map components */
+        setPreferredSize(new Dimension(800, 800));
+        setBackground(Color.LIGHT_GRAY);
         setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
     }
 
@@ -46,20 +42,5 @@ public class GISPanel extends JXMapViewer {
         painter.addPainter(waypointPainter);
 
         setOverlayPainter(painter);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(200, 200);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        return getPreferredSize();
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        return getPreferredSize();
     }
 }

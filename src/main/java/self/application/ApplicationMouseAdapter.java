@@ -1,4 +1,4 @@
-package org.example.application.util;
+package self.application;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
