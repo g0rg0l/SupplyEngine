@@ -1,5 +1,7 @@
 package self.engine;
 
+import self.simulation.Simulation;
+
 public class Engine {
     public void run(Simulation simulation) {
         Thread gameLoop = new Thread(() -> {

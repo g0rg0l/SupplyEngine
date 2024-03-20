@@ -3,7 +3,7 @@ package self.application;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
-import self.engine.Simulation;
+import self.simulation.Simulation;
 import self.map.GISPanel;
 
 import javax.swing.*;

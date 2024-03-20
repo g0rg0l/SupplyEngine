@@ -1,4 +1,6 @@
-package self.engine;
+package self.simulation;
+
+import self.engine.Engine;
 
 import javax.swing.*;
 import java.awt.*;

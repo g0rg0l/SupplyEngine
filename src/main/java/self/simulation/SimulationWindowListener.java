@@ -1,4 +1,4 @@
-package self.engine;
+package self.simulation;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
