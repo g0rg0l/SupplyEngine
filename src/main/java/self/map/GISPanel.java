@@ -21,8 +21,6 @@ public class GISPanel extends JXMapViewer {
         addMouseMotionListener(mouseAdapter);
         addMouseWheelListener(mouseAdapter);
 
-        setPreferredSize(new Dimension(800, 800));
-        setBackground(Color.LIGHT_GRAY);
         setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
     }
 

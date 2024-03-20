@@ -5,6 +5,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 import self.simulation.Simulation;
 import self.map.GISPanel;
+import static self.utility.Preferences.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,8 +38,7 @@ public class Application extends JFrame {
         createPanels();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(1000, 600));
-        setPreferredSize(new Dimension(1400, 1000));
+        setMinimumSize(APPLICATION_MINIMUM_SIZE);
         pack();
         setVisible(true);
     }
@@ -54,8 +54,8 @@ public class Application extends JFrame {
 
     private void createMenu(Container pane) {
         JPanel menu = new JPanel();
-        menu.setPreferredSize(new Dimension(400, 800));
-        menu.setBackground(Color.ORANGE);
+        menu.setPreferredSize(APPLICATION_MENU_DEFAULT_SIZE);
+        menu.setBackground(APPLICATION_MENU_DEFAULT_COLOR);
         menu.setLayout(new BorderLayout());
         menu.setBorder(new EmptyBorder(15, 50, 15, 50));
 
@@ -70,6 +70,8 @@ public class Application extends JFrame {
 
     private void createMap(Container pane) {
         GISPanel map = new GISPanel();
+        map.setPreferredSize(APPLICATION_MAP_DEFAULT_SIZE);
+        map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
 
         GeoPosition frankfurt = new GeoPosition(50,  7, 0, 8, 41, 0);
         GeoPosition wiesbaden = new GeoPosition(50,  5, 0, 8, 14, 0);
@@ -85,17 +87,16 @@ public class Application extends JFrame {
                 new DefaultWaypoint(offenbach)
         ));
 
-        map.calculateZoomFrom(new HashSet<>(track));
+        map.setZoom(17);
+        map.setCenter(map.getTileFactory().getInfo().getMapCenterInPixelsAtZoom(map.getZoom()));
         map.initMapLocations(waypoints);
-
         pane.add(map, BorderLayout.CENTER);
     }
 
     private void createHeaderPanel(Container pane) {
         JPanel header = new JPanel();
-        header.setPreferredSize(new Dimension(1000, 50));
-        header.setBackground(Color.RED);
-
+        header.setPreferredSize(APPLICATION_HEADER_DEFAULT_SIZE);
+        header.setBackground(APPLICATION_HEADER_DEFAULT_COLOR);
         pane.add(header, BorderLayout.PAGE_START);
     }
 
