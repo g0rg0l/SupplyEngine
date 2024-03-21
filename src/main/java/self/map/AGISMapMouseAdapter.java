@@ -1,21 +1,20 @@
-package self.application;
+package self.map;
 
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import java.awt.event.*;
 
 
-public class ApplicationMouseAdapter implements MouseListener, MouseMotionListener, MouseWheelListener {
-    private final MouseListener mouseListener;
-    private final MouseMotionListener mouseMotionListener;
-    private final MouseWheelListener mouseWheelListener;
+public abstract class AGISMapMouseAdapter implements MouseListener, MouseMotionListener, MouseWheelListener {
+    protected final MouseListener mouseListener;
+    protected final MouseMotionListener mouseMotionListener;
+    protected final MouseWheelListener mouseWheelListener;
 
-    public ApplicationMouseAdapter(JXMapViewer viewer) {
-        this.mouseListener = new PanMouseInputListener(viewer);
+    public AGISMapMouseAdapter(GISMap map) {
+        this.mouseListener = new PanMouseInputListener(map);
         this.mouseMotionListener = (MouseMotionListener) this.mouseListener;
-        this.mouseWheelListener = new ZoomMouseWheelListenerCursor(viewer);
+        this.mouseWheelListener = new ZoomMouseWheelListenerCursor(map);
     }
 
     @Override

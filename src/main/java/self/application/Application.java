@@ -3,12 +3,14 @@ package self.application;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
+import self.map.ApplicationGISMapMouseAdaptor;
 import self.simulation.Simulation;
-import self.map.GISPanel;
+import self.map.GISMap;
+import self.utility.SimulationConfiguration;
+
 import static self.utility.Preferences.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +59,13 @@ public class Application extends JFrame {
         menu.setPreferredSize(APPLICATION_MENU_DEFAULT_SIZE);
         menu.setBackground(APPLICATION_MENU_DEFAULT_COLOR);
         menu.setLayout(new BorderLayout());
-        menu.setBorder(new EmptyBorder(15, 50, 15, 50));
+
+        menu.setBorder(
+                BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.WHITE, 4),
+                    BorderFactory.createEmptyBorder(15, 50, 15, 50)
+                )
+        );
 
         JButton startSimulationButton = new JButton("Start");
         startSimulationButton.setPreferredSize(new Dimension(250, 50));
@@ -69,9 +77,22 @@ public class Application extends JFrame {
     }
 
     private void createMap(Container pane) {
-        GISPanel map = new GISPanel();
+        GISMap map = new GISMap();
+        map.setMouseAdapter(new ApplicationGISMapMouseAdaptor(map));
         map.setPreferredSize(APPLICATION_MAP_DEFAULT_SIZE);
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
+
+        map.setZoom(GIS_MAP_DEFAULT_ZOOM);
+        map.setCenter(map.getTileFactory().getInfo().getMapCenterInPixelsAtZoom(map.getZoom()));
+        SimulationConfiguration.INSTANCE.setMapZoomLevel(map.getZoom());
+        SimulationConfiguration.INSTANCE.setMapCenterPoint(map.getCenter());
+
+        map.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(0, 0, 0, -4),
+                        BorderFactory.createLineBorder(Color.WHITE, 4)
+                )
+        );
 
         GeoPosition frankfurt = new GeoPosition(50,  7, 0, 8, 41, 0);
         GeoPosition wiesbaden = new GeoPosition(50,  5, 0, 8, 14, 0);
@@ -86,10 +107,8 @@ public class Application extends JFrame {
                 new DefaultWaypoint(darmstadt),
                 new DefaultWaypoint(offenbach)
         ));
-
-        map.setZoom(17);
-        map.setCenter(map.getTileFactory().getInfo().getMapCenterInPixelsAtZoom(map.getZoom()));
         map.initMapLocations(waypoints);
+
         pane.add(map, BorderLayout.CENTER);
     }
 

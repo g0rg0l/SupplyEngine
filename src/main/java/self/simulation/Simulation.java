@@ -1,14 +1,16 @@
 package self.simulation;
 
 import self.engine.Engine;
-import self.map.GISPanel;
+import self.map.GISMap;
+import self.map.SimulationGISMouseAdapter;
+import self.utility.SimulationConfiguration;
+
+import static self.utility.Preferences.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Simulation extends JFrame {
-    public final static Dimension DEFAULT_SIZE = new Dimension(800, 600);
-    public final static Dimension MINIMUM_SIZE = new Dimension(800, 600);
     private final Engine engine;
     private boolean isRunning;
 
@@ -19,6 +21,7 @@ public class Simulation extends JFrame {
         this.isRunning = false;
 
         createAndShowGUI();
+        setup();
     }
 
     private void createAndShowGUI() {
@@ -33,11 +36,20 @@ public class Simulation extends JFrame {
     }
 
     private void createMap(Container pane) {
-        GISPanel map = new GISPanel();
-        map.setBackground(Color.LIGHT_GRAY);
-        map.setPreferredSize(DEFAULT_SIZE);
-        map.setMinimumSize(MINIMUM_SIZE);
+        GISMap map = new GISMap();
+        map.setMouseAdapter(new SimulationGISMouseAdapter(map));
+        map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
+        map.setPreferredSize(SIMULATION_DEFAULT_SIZE);
+        map.setMinimumSize(SIMULATION_MINIMUM_SIZE);
+
+        map.setZoom(SimulationConfiguration.INSTANCE.getMapZoomLevel());
+        map.setCenter(SimulationConfiguration.INSTANCE.getMapCenterPoint());
+
         pane.add(map);
+    }
+
+    private void setup() {
+
     }
 
     public void update(float dt) {

@@ -1,6 +1,5 @@
 package self.map;
 
-import self.application.ApplicationMouseAdapter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -8,20 +7,27 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import java.awt.*;
 import java.util.Set;
 
-public class GISPanel extends JXMapViewer {
-    private ApplicationMouseAdapter mouseAdapter;
+public class GISMap extends JXMapViewer {
+    private AGISMapMouseAdapter mouseAdapter;
     private CompoundPainter<JXMapViewer> painter;
 
-    public GISPanel() {
-        this.mouseAdapter = new ApplicationMouseAdapter(this);
+    public GISMap() {
+        setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
+    }
+
+    public void setMouseAdapter(AGISMapMouseAdapter mouseAdapter) {
+        if (this.mouseAdapter != null) {
+            removeMouseListener(this.mouseAdapter);
+            removeMouseMotionListener(this.mouseAdapter);
+            removeMouseWheelListener(this.mouseAdapter);
+        }
+
+        this.mouseAdapter = mouseAdapter;
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
         addMouseWheelListener(mouseAdapter);
-
-        setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
     }
 
     /**
