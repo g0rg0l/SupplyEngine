@@ -1,8 +1,7 @@
 package self.simulation;
 
 import self.engine.Engine;
-import self.map.GISMap;
-import self.map.SimulationGISMouseAdapter;
+import self.map.AGISMap;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
@@ -36,7 +35,7 @@ public class Simulation extends JFrame {
     }
 
     private void createMap(Container pane) {
-        GISMap map = new GISMap();
+        SimulationGISMap map = new SimulationGISMap();
         map.setMouseAdapter(new SimulationGISMouseAdapter(map));
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
         map.setPreferredSize(SIMULATION_DEFAULT_SIZE);

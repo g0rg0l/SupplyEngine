@@ -9,8 +9,11 @@ public class Preferences {
     public static final Dimension APPLICATION_MAP_DEFAULT_SIZE = new Dimension(1000, 800);
     public static final Dimension APPLICATION_MENU_DEFAULT_SIZE = new Dimension(400, 800);
     public static final Dimension APPLICATION_HEADER_DEFAULT_SIZE = new Dimension(1000, 50);
-    public final static Dimension SIMULATION_DEFAULT_SIZE = new Dimension(800, 600);
-    public final static Dimension SIMULATION_MINIMUM_SIZE = new Dimension(800, 600);
+    public static final Dimension SIMULATION_DEFAULT_SIZE = new Dimension(800, 600);
+    public static final Dimension SIMULATION_MINIMUM_SIZE = new Dimension(800, 600);
+    public static final Dimension APPLICATION_HEADER_ADD_BUTTONS_DEFAULT_SIZE = new Dimension(189, 36);
+
+
 
     /* COLORS */
     public static final Color GIS_MAP_DEFAULT_BACKGROUND_COLOR = Color.WHITE;

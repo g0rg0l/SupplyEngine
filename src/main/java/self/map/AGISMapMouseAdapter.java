@@ -11,7 +11,7 @@ public abstract class AGISMapMouseAdapter implements MouseListener, MouseMotionL
     protected final MouseMotionListener mouseMotionListener;
     protected final MouseWheelListener mouseWheelListener;
 
-    public AGISMapMouseAdapter(GISMap map) {
+    public AGISMapMouseAdapter(AGISMap map) {
         this.mouseListener = new PanMouseInputListener(map);
         this.mouseMotionListener = (MouseMotionListener) this.mouseListener;
         this.mouseWheelListener = new ZoomMouseWheelListenerCursor(map);
