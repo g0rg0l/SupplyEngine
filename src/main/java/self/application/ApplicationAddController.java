@@ -44,8 +44,8 @@ public class ApplicationAddController {
         if (addingType != null) {
             Rectangle viewportBounds = map.getViewportBounds();
             Point fixedPoint = new Point(
-                    viewportBounds.x + mousePoint.x + 18,
-                    viewportBounds.y + mousePoint.y + 35
+                    viewportBounds.x + mousePoint.x + 16,
+                    viewportBounds.y + mousePoint.y + 32
             );
 
             GeoPosition position = map.getTileFactory().pixelToGeo(fixedPoint, map.getZoom());
