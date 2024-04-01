@@ -3,10 +3,8 @@ package self.application;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
-import self.map.waypoints.MapWaypoint;
 import self.map.waypoints.MapWaypointFactory;
 import self.simulation.Simulation;
-import self.map.AGISMap;
 import self.simulation.facilities.FacilityType;
 import self.utility.SimulationConfiguration;
 
