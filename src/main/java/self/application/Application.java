@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
+
 public class Application extends JFrame {
     private final ApplicationActionListener actionListener;
     public final ApplicationAddController applicationAddController;
