@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapRouteProvider {
-    public static MapRouteProvider INSTANCE = new MapRouteProvider();
+public class MapPathProvider {
+    public static MapPathProvider INSTANCE = new MapPathProvider();
     private final GraphHopper hopper;
 
-    private MapRouteProvider() {
+    private MapPathProvider() {
         hopper = new GraphHopper();
 
         initRoutingSettings();
@@ -30,7 +30,7 @@ public class MapRouteProvider {
         hopper.importOrLoad();
     }
 
-    public MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) {
+    public Path getPath(double fromLat, double fromLon, double toLat, double toLon) {
         GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon).setProfile("car").setLocale(Locale.US);
         GHResponse rsp = hopper.route(req);
 
@@ -43,15 +43,14 @@ public class MapRouteProvider {
         List<GeoPosition> points = new ArrayList<>();
         path.getPoints().forEach(p -> points.add(new GeoPosition(p.getLat(), p.getLon())));
 
-        return new MapRoute(
-                points,
+        return new Path(
                 path.getDistance(),
-                path.getTime()
-
+                path.getTime(),
+                points
         );
     }
 
-    public MapRoute getRoute(GeoPosition a, GeoPosition b) {
-        return getRoute(a.getLatitude(), a.getLongitude(), b.getLatitude(), b.getLongitude());
+    public Path getPath(GeoPosition a, GeoPosition b) {
+        return getPath(a.getLatitude(), a.getLongitude(), b.getLatitude(), b.getLongitude());
     }
 }

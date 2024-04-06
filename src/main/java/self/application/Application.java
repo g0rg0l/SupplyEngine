@@ -3,7 +3,8 @@ package self.application;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
-import self.map.routing.MapRouteProvider;
+import self.map.routing.MapPathProvider;
+import self.map.routing.MapRouteFactory;
 import self.map.waypoints.MapWaypointFactory;
 import self.simulation.Simulation;
 import self.simulation.facilities.FacilityType;
@@ -114,9 +115,9 @@ public class Application extends JFrame {
         map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, petropavlovsk));
         map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.DC, almaati));
 
-        var a = MapRouteProvider.INSTANCE.getRoute(petropavlovsk, almaati);
+        var a = MapRouteFactory.createRoute(petropavlovsk, almaati, map);
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 100; i++)
             map.addRoute(a);
 
         applicationAddController.setMap(map);
