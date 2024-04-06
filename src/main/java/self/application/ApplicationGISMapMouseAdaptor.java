@@ -1,11 +1,9 @@
 package self.application;
 
-import self.application.Application;
 import self.map.AGISMap;
 import self.map.AGISMapMouseAdapter;
 import self.utility.SimulationConfiguration;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
@@ -23,14 +21,17 @@ public class ApplicationGISMapMouseAdaptor extends AGISMapMouseAdapter {
     @Override
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
+
         SimulationConfiguration.INSTANCE.setMapCenterPoint(map.getCenter());
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         super.mouseWheelMoved(e);
+
         SimulationConfiguration.INSTANCE.setMapZoomLevel(map.getZoom());
         SimulationConfiguration.INSTANCE.setMapCenterPoint(map.getCenter());
+        map.onZoomUpdated();
     }
 
     @Override

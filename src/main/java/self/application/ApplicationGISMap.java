@@ -1,45 +1,36 @@
 package self.application;
 
-import org.jxmapviewer.viewer.WaypointPainter;
 import self.map.AGISMap;
+import self.map.routing.MapRoute;
+import self.map.routing.MapRoutePainter;
 import self.map.waypoints.MapWaypoint;
-import self.map.waypoints.MapWaypointRenderer;
-
-import java.util.HashSet;
-import java.util.Set;
+import self.map.waypoints.MapWaypointPainter;
 
 
 public class ApplicationGISMap extends AGISMap {
-    private WaypointPainter<MapWaypoint> waypointPainter;
 
     public ApplicationGISMap() {
         super();
-        resetWaypointPainter();
+
+        MapWaypointPainter waypointPainter = new MapWaypointPainter(waypointManager);
+        painter.addPainter(waypointPainter);
+
+        MapRoutePainter routePainter = new MapRoutePainter(routeManager);
+        painter.addPainter(routePainter);
+
         setOverlayPainter(painter);
     }
 
     public void addWaypoint(MapWaypoint waypoint) {
-        Set<MapWaypoint> waypoints = new HashSet<>(waypointPainter.getWaypoints());
-        waypoints.add(waypoint);
-        resetWaypointPainter(waypoints);
+        waypointManager.addObject(waypoint);
     }
 
-    private void resetWaypointPainter() {
-        painter.removePainter(waypointPainter);
-
-        waypointPainter = new WaypointPainter<>();
-        waypointPainter.setRenderer(new MapWaypointRenderer());
-
-        painter.addPainter(waypointPainter);
+    public void addRoute(MapRoute route) {
+        routeManager.addObject(route);
     }
 
-    private void resetWaypointPainter(Set<MapWaypoint> waypoints) {
-        painter.removePainter(waypointPainter);
-
-        waypointPainter = new WaypointPainter<>();
-        waypointPainter.setRenderer(new MapWaypointRenderer());
-        waypointPainter.setWaypoints(waypoints);
-
-        painter.addPainter(waypointPainter);
+    @Override
+    public void onZoomUpdated() {
+        routeManager.onZoomUpdated(getZoom());
     }
 }

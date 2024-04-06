@@ -4,19 +4,20 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.WaypointPainter;
-import self.map.waypoints.MapWaypoint;
-import self.map.waypoints.MapWaypointRenderer;
-
-import java.util.Set;
+import self.map.routing.MapRouteManager;
+import self.map.waypoints.MapWaypointManager;
 
 public abstract class AGISMap extends JXMapViewer {
     protected AGISMapMouseAdapter mouseAdapter;
     protected final CompoundPainter<JXMapViewer> painter;
+    protected final MapRouteManager routeManager;
+    protected final MapWaypointManager waypointManager;
 
     public AGISMap() {
         setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
         this.painter = new CompoundPainter<>();
+        this.routeManager = new MapRouteManager();
+        this.waypointManager = new MapWaypointManager();
     }
 
     public void setMouseAdapter(AGISMapMouseAdapter mouseAdapter) {
@@ -32,22 +33,5 @@ public abstract class AGISMap extends JXMapViewer {
         addMouseWheelListener(mouseAdapter);
     }
 
-//    /**
-//     * Метод, инициализирующий карту - отображение локаций с их иконками, создание путей между локациями.
-//     * Вызывается после инициализации сценария, предполагается, что 1 раз.
-//     *
-//     * @param waypoints - множество точек для отображение
-//     * TODO: Передавать не только 1 список, но столько, сколько разных типов объектов на карте
-//     */
-//    public void initMapLocations(Set<MapWaypoint> waypoints) {
-//        painter = new CompoundPainter<>();
-//
-//        /* Waypoints painter */
-//        WaypointPainter<MapWaypoint> waypointPainter = new WaypointPainter<>();
-//        waypointPainter.setWaypoints(waypoints);
-//        waypointPainter.setRenderer(new MapWaypointRenderer());
-//        painter.addPainter(waypointPainter);
-//
-//        setOverlayPainter(painter);
-//    }
+    public abstract void onZoomUpdated();
 }

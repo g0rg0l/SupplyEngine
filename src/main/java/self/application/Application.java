@@ -3,6 +3,7 @@ package self.application;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
+import self.map.routing.MapRouteProvider;
 import self.map.waypoints.MapWaypointFactory;
 import self.simulation.Simulation;
 import self.simulation.facilities.FacilityType;
@@ -107,26 +108,16 @@ public class Application extends JFrame {
                 )
         );
 
-        GeoPosition frankfurt = new GeoPosition(50,  7, 0, 8, 41, 0);
-        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, frankfurt));
+        GeoPosition petropavlovsk = new GeoPosition(54.868672750248, 69.13719973373541);
+        GeoPosition almaati = new GeoPosition(43.24467981803127, 76.86720021424557);
 
-        GeoPosition wiesbaden = new GeoPosition(50,  5, 0, 8, 14, 0);
-        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.DC, wiesbaden));
+        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, petropavlovsk));
+        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.DC, almaati));
 
-//        GeoPosition frankfurt = new GeoPosition(50,  7, 0, 8, 41, 0);
-//        GeoPosition wiesbaden = new GeoPosition(50,  5, 0, 8, 14, 0);
-//        GeoPosition mainz     = new GeoPosition(50,  0, 0, 8, 16, 0);
-//        GeoPosition darmstadt = new GeoPosition(49, 52, 0, 8, 39, 0);
-//        GeoPosition offenbach = new GeoPosition(50,  6, 0, 8, 46, 0);
-//
-//        Set<MapWaypoint> waypoints = new HashSet<>(Arrays.asList(
-//                MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, frankfurt),
-//                MapWaypointFactory.INSTANCE.create(FacilityType.DC, wiesbaden),
-//                MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, mainz),
-//                MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, darmstadt),
-//                MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, offenbach)
-//        ));
-//        map.initMapLocations(waypoints);
+        var a = MapRouteProvider.INSTANCE.getRoute(petropavlovsk, almaati);
+
+        for (int i = 0; i < 1; i++)
+            map.addRoute(a);
 
         applicationAddController.setMap(map);
         pane.add(map, BorderLayout.CENTER);
