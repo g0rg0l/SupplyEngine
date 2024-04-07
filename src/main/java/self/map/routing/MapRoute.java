@@ -3,7 +3,10 @@ package self.map.routing;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.MapUtilities;
+import self.simulation.Shipment;
 
+import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +20,9 @@ public class MapRoute {
     private final Map<Integer, List<GeoPosition>> geoPointsDetalizationMap;
     private final Map<Integer, List<Point2D>> points2DDetalizationMap;
     private final Map<Integer, Double> distanceDetalizationMap;
+    private final List<Shipment> movables;
+    private Map<Shipment, Integer> movableZooms;
+    private int zoom;
 
 
     public MapRoute(JXMapViewer map, Path path) {
@@ -26,8 +32,23 @@ public class MapRoute {
         this.geoPointsDetalizationMap = new HashMap<>();
         this.points2DDetalizationMap = new HashMap<>();
         this.distanceDetalizationMap = new HashMap<>();
+        this.movables = new ArrayList<>();
+        this.movableZooms = new HashMap<>();
+        this.zoom = map.getZoom();
 
         init(map);
+    }
+
+    public MapRoute(MapRoute that) {
+        this.originalPoints = that.originalPoints;
+        this.originalDistance = that.originalDistance;
+        this.originalTime = that.originalTime;
+        this.geoPointsDetalizationMap = that.geoPointsDetalizationMap;
+        this.points2DDetalizationMap = that.points2DDetalizationMap;
+        this.distanceDetalizationMap = that.distanceDetalizationMap;
+        this.movables = new ArrayList<>();
+        this.movableZooms = new HashMap<>();
+        this.zoom = that.zoom;
     }
 
     /**
@@ -69,21 +90,70 @@ public class MapRoute {
         }
     }
 
+    public void draw(Graphics2D g2d, JXMapViewer map) {
+        movables.forEach(m -> m.draw(g2d));
+
+        var rectangle = map.getViewportBounds();
+        var points2D = getPoints2D(map.getZoom());
+
+        g2d.setColor(Color.BLUE);
+        for (int i = 1; i < points2D.size(); i++) {
+            Line2D line2D = new Line2D.Double(points2D.get(i - 1), points2D.get(i));
+
+            if (line2D.intersects(rectangle))
+                g2d.draw(line2D);
+        }
+    }
+
+    /**
+     * Метод, который принимает какой-то IMovable объект для его дальнейшего движения.
+     * Тут объект выставляется на координаты начала движения и ему задаётся скорость в текущем приближении.
+     *
+     * @param movable - Принимаемый для движения объект.
+     */
+    public void move(Shipment movable) {
+        var startPoint = points2DDetalizationMap.get(zoom).get(0);
+        var targetPoint = points2DDetalizationMap.get(zoom).get(1);
+
+        var speed = distanceDetalizationMap.get(zoom) / originalTime / Math.pow(2, zoom);
+
+        movable.setup(startPoint, targetPoint, speed);
+        movables.add(movable);
+        movableZooms.put(movable, zoom);
+    }
+
+    public void update(float dt) {
+        for (Shipment shipment : movables) {
+            if (shipment.update(dt)) {
+                recalculate(shipment);
+            }
+        }
+    }
+
+    /**
+     * Как только объект дошёл до своего таргета - точки в руте, вызывается этот метод:
+     * в нём задаётся новый таргет для объекта.
+     *
+     * @param shipment Объект, который достиг таргета движения
+     */
+    private void recalculate(Shipment shipment) {
+        int oldTargetIndex = points2DDetalizationMap.get(movableZooms.get(shipment)).indexOf(shipment.getTarget());
+
+        if (oldTargetIndex + 1 < points2DDetalizationMap.get(movableZooms.get(shipment)).size()) {
+            var newTarget = points2DDetalizationMap.get(movableZooms.get(shipment)).get(oldTargetIndex + 1);
+            shipment.setTarget(newTarget);
+        }
+    }
+
     public List<GeoPosition> getGeoPoints(int zoom) {
         return geoPointsDetalizationMap.get(zoom);
     }
 
-    public List<Point2D> getPoints2D(int zoom) { return points2DDetalizationMap.get(zoom); }
-
-    public List<GeoPosition> getOriginalPoints() {
-        return originalPoints;
+    public List<Point2D> getPoints2D(int zoom) {
+        return points2DDetalizationMap.get(zoom);
     }
 
-    public double getOriginalDistance() {
-        return originalDistance;
-    }
-
-    public long getOriginalTime() {
-        return originalTime;
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
     }
 }

@@ -14,6 +14,12 @@ public class MapWaypoint extends DefaultWaypoint {
         this.image = image;
     }
 
+    public MapWaypoint(MapWaypoint that) {
+        super(that.getPosition());
+
+        this.image = that.image;
+    }
+
     public BufferedImage getImage() {
         return image;
     }

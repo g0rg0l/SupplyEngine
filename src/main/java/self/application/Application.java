@@ -4,8 +4,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
 import self.map.routing.MapPathProvider;
+import self.map.routing.MapRoute;
 import self.map.routing.MapRouteFactory;
 import self.map.waypoints.MapWaypointFactory;
+import self.simulation.Shipment;
 import self.simulation.Simulation;
 import self.simulation.facilities.FacilityType;
 import self.utility.SimulationConfiguration;
@@ -17,12 +19,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
+import java.util.List;
 
 
 public class Application extends JFrame {
     private final ApplicationActionListener actionListener;
     public final ApplicationAddController applicationAddController;
     private Simulation simulation;
+    private ApplicationGISMap map;
 
     public Application(String label) {
         super(label);
@@ -35,6 +39,9 @@ public class Application extends JFrame {
 
     public void createAndRunSimulation() {
         if (simulation == null || !simulation.isRunning()) {
+            SimulationConfiguration.INSTANCE.setWaypoints(map.getWaypointManager().getObjects());
+            SimulationConfiguration.INSTANCE.setRoutes(map.getRouteManager().getObjects());
+
             simulation = new Simulation();
             simulation.start();
         }
@@ -92,7 +99,7 @@ public class Application extends JFrame {
     }
 
     private void createMap(Container pane) {
-        ApplicationGISMap map = new ApplicationGISMap();
+        map = new ApplicationGISMap();
         map.setMouseAdapter(new ApplicationGISMapMouseAdaptor(map, this));
         map.setPreferredSize(APPLICATION_MAP_DEFAULT_SIZE);
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
@@ -109,16 +116,23 @@ public class Application extends JFrame {
                 )
         );
 
-        GeoPosition petropavlovsk = new GeoPosition(54.868672750248, 69.13719973373541);
-        GeoPosition almaati = new GeoPosition(43.24467981803127, 76.86720021424557);
+        List<GeoPosition> locations = new ArrayList<>(List.of(
+                new GeoPosition(54.868672750248, 69.13719973373541),
+                new GeoPosition(43.24467981803127, 76.86720021424557),
+                new GeoPosition(51.18186939136685, 71.42249140671186),
+                new GeoPosition(49.80068897769735, 73.10705353279045),
+                new GeoPosition(50.43362440820337, 80.22807986083738),
+                new GeoPosition(52.960822199271526, 63.10649848449209)
+        ));
 
-        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, petropavlovsk));
-        map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.DC, almaati));
+        for (GeoPosition loc : locations)
+            map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, loc));
 
-        var a = MapRouteFactory.createRoute(petropavlovsk, almaati, map);
 
-        for (int i = 0; i < 100; i++)
-            map.addRoute(a);
+        for (int i = 0; i < locations.size() - 1; i++)
+            for (int j = i + 1; j < locations.size(); j++) {
+                map.addRoute(MapRouteFactory.createRoute(locations.get(i), locations.get(j), map));
+            }
 
         applicationAddController.setMap(map);
         pane.add(map, BorderLayout.CENTER);

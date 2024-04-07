@@ -2,15 +2,19 @@ package self.simulation;
 
 import self.engine.Engine;
 import self.map.AGISMap;
+import self.map.routing.MapRoute;
+import self.map.waypoints.MapWaypoint;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class Simulation extends JFrame {
     private final Engine engine;
+    private SimulationGISMap map;
     private boolean isRunning;
 
     public Simulation() {
@@ -35,7 +39,7 @@ public class Simulation extends JFrame {
     }
 
     private void createMap(Container pane) {
-        SimulationGISMap map = new SimulationGISMap();
+        map = new SimulationGISMap();
         map.setMouseAdapter(new SimulationGISMouseAdapter(map));
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
         map.setPreferredSize(SIMULATION_DEFAULT_SIZE);
@@ -43,6 +47,24 @@ public class Simulation extends JFrame {
 
         map.setZoom(SimulationConfiguration.INSTANCE.getMapZoomLevel());
         map.setCenter(SimulationConfiguration.INSTANCE.getMapCenterPoint());
+
+
+        map.setRoutes(SimulationConfiguration.INSTANCE.getRoutes()
+                .stream()
+                .map(MapRoute::new)
+                .toList()
+        );
+        map.setWaypoints(SimulationConfiguration.INSTANCE.getWaypoints()
+                .stream()
+                .map(MapWaypoint::new)
+                .toList()
+        );
+
+        map.getRouteManager().getObjects().get(0).move(new Shipment());
+        map.getRouteManager().getObjects().get(5).move(new Shipment());
+        map.getRouteManager().getObjects().get(9).move(new Shipment());
+        map.getRouteManager().getObjects().get(12).move(new Shipment());
+        map.getRouteManager().getObjects().get(14).move(new Shipment());
 
         pane.add(map);
     }
@@ -52,7 +74,7 @@ public class Simulation extends JFrame {
     }
 
     public void update(float dt) {
-
+        map.getRouteManager().getObjects().forEach(r -> r.update(dt));
     }
 
     public void start() {

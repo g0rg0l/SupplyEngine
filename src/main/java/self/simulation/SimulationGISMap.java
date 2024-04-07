@@ -1,14 +1,17 @@
 package self.simulation;
 
 import self.map.AGISMap;
+import self.map.routing.MapRoute;
+import self.map.waypoints.MapWaypoint;
+
+import java.util.List;
 
 public class SimulationGISMap extends AGISMap {
-    public SimulationGISMap() {
-        super();
+    public void setWaypoints(List<MapWaypoint> waypoints) {
+        waypointManager.setObjects(waypoints);
     }
 
-    @Override
-    public void onZoomUpdated() {
-
+    public void setRoutes(List<MapRoute> routes) {
+        routeManager.setObjects(routes);
     }
 }

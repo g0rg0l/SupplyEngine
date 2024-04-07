@@ -5,7 +5,9 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import self.map.routing.MapRouteManager;
+import self.map.routing.MapRoutePainter;
 import self.map.waypoints.MapWaypointManager;
+import self.map.waypoints.MapWaypointPainter;
 
 public abstract class AGISMap extends JXMapViewer {
     protected AGISMapMouseAdapter mouseAdapter;
@@ -18,6 +20,14 @@ public abstract class AGISMap extends JXMapViewer {
         this.painter = new CompoundPainter<>();
         this.routeManager = new MapRouteManager();
         this.waypointManager = new MapWaypointManager();
+
+        MapWaypointPainter waypointPainter = new MapWaypointPainter(waypointManager);
+        painter.addPainter(waypointPainter);
+
+        MapRoutePainter routePainter = new MapRoutePainter(routeManager);
+        painter.addPainter(routePainter);
+
+        setOverlayPainter(painter);
     }
 
     public void setMouseAdapter(AGISMapMouseAdapter mouseAdapter) {
@@ -33,5 +43,15 @@ public abstract class AGISMap extends JXMapViewer {
         addMouseWheelListener(mouseAdapter);
     }
 
-    public abstract void onZoomUpdated();
+    public void onZoomUpdated() {
+        routeManager.onZoomUpdated(getZoom());
+    }
+
+    public MapRouteManager getRouteManager() {
+        return routeManager;
+    }
+
+    public MapWaypointManager getWaypointManager() {
+        return waypointManager;
+    }
 }

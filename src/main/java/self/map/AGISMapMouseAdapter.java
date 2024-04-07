@@ -10,11 +10,13 @@ public abstract class AGISMapMouseAdapter implements MouseListener, MouseMotionL
     protected final MouseListener mouseListener;
     protected final MouseMotionListener mouseMotionListener;
     protected final MouseWheelListener mouseWheelListener;
+    protected final AGISMap map;
 
     public AGISMapMouseAdapter(AGISMap map) {
         this.mouseListener = new PanMouseInputListener(map);
         this.mouseMotionListener = (MouseMotionListener) this.mouseListener;
         this.mouseWheelListener = new ZoomMouseWheelListenerCursor(map);
+        this.map = map;
     }
 
     @Override
@@ -57,5 +59,6 @@ public abstract class AGISMapMouseAdapter implements MouseListener, MouseMotionL
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         mouseWheelListener.mouseWheelMoved(e);
+        map.onZoomUpdated();
     }
 }

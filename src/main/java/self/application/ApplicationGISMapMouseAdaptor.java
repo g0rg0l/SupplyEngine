@@ -8,13 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 public class ApplicationGISMapMouseAdaptor extends AGISMapMouseAdapter {
-    private final AGISMap map;
     private final Application application;
 
 
     public ApplicationGISMapMouseAdaptor(AGISMap map, Application application) {
         super(map);
-        this.map = map;
         this.application = application;
     }
 
@@ -31,7 +29,6 @@ public class ApplicationGISMapMouseAdaptor extends AGISMapMouseAdapter {
 
         SimulationConfiguration.INSTANCE.setMapZoomLevel(map.getZoom());
         SimulationConfiguration.INSTANCE.setMapCenterPoint(map.getCenter());
-        map.onZoomUpdated();
     }
 
     @Override
