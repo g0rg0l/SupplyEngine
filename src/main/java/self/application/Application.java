@@ -3,11 +3,8 @@ package self.application;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
-import self.map.routing.MapPathProvider;
-import self.map.routing.MapRoute;
 import self.map.routing.MapRouteFactory;
 import self.map.waypoints.MapWaypointFactory;
-import self.simulation.Shipment;
 import self.simulation.Simulation;
 import self.simulation.facilities.FacilityType;
 import self.utility.SimulationConfiguration;
@@ -58,8 +55,6 @@ public class Application extends JFrame {
     }
 
     private void createPanels() {
-        JPanel applicationPanel = new JPanel();
-
         Container pane = getContentPane();
         pane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 

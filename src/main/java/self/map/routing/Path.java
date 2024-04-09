@@ -11,7 +11,7 @@ public class Path {
 
     public Path(double distance, long time, List<GeoPosition> geoPositions) {
         this.distance = distance;
-        this.time = time / 50000L;
+        this.time = time;
         this.geoPositions = geoPositions;
     }
 

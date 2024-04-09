@@ -45,7 +45,7 @@ public class MapPathProvider {
 
         return new Path(
                 path.getDistance(),
-                path.getTime(),
+                path.getTime() / 1000L,
                 points
         );
     }

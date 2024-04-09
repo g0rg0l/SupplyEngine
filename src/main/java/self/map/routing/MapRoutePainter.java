@@ -24,6 +24,7 @@ public class MapRoutePainter implements Painter<JXMapViewer> {
         g.setStroke(new BasicStroke(2));
 
         routeManager.getObjects().forEach(r -> r.draw(g, map));
+        routeManager.getObjects().forEach(r -> r.getMovables().forEach(m -> m.draw(g)));
 
         g.dispose();
     }

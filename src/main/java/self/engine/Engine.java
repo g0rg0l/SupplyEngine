@@ -21,7 +21,7 @@ public class Engine {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     float dt = (float) elapsedTime / 1000;
-                    simulation.update(dt);
+                    simulation.update(dt * 5000);
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
                 }

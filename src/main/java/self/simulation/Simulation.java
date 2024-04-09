@@ -1,7 +1,6 @@
 package self.simulation;
 
 import self.engine.Engine;
-import self.map.AGISMap;
 import self.map.routing.MapRoute;
 import self.map.waypoints.MapWaypoint;
 import self.utility.SimulationConfiguration;
@@ -10,7 +9,6 @@ import static self.utility.Preferences.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class Simulation extends JFrame {
     private final Engine engine;
@@ -60,11 +58,11 @@ public class Simulation extends JFrame {
                 .toList()
         );
 
-        map.getRouteManager().getObjects().get(0).move(new Shipment());
-        map.getRouteManager().getObjects().get(5).move(new Shipment());
-        map.getRouteManager().getObjects().get(9).move(new Shipment());
-        map.getRouteManager().getObjects().get(12).move(new Shipment());
-        map.getRouteManager().getObjects().get(14).move(new Shipment());
+        map.getRouteManager().getObjects().get(0).move(new RouteMovable());
+        map.getRouteManager().getObjects().get(5).move(new RouteMovable());
+        map.getRouteManager().getObjects().get(9).move(new RouteMovable());
+        map.getRouteManager().getObjects().get(12).move(new RouteMovable());
+        map.getRouteManager().getObjects().get(14).move(new RouteMovable());
 
         pane.add(map);
     }
