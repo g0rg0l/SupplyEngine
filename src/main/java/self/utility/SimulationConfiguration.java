@@ -1,7 +1,7 @@
 package self.utility;
 
 import self.map.routing.MapRoute;
-import self.map.waypoints.MapWaypoint;
+import self.simulation.facilities.Facility;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -13,7 +13,7 @@ public class SimulationConfiguration {
     private int mapZoomLevel;
     private Point2D mapCenterPoint;
     private List<MapRoute> routes;
-    private List<MapWaypoint> waypoints;
+    private List<Facility> facilities;
 
     public List<MapRoute> getRoutes() {
         return routes;
@@ -23,12 +23,12 @@ public class SimulationConfiguration {
         this.routes = routes;
     }
 
-    public List<MapWaypoint> getWaypoints() {
-        return waypoints;
+    public List<Facility> getFacilities() {
+        return facilities;
     }
 
-    public void setWaypoints(List<MapWaypoint> waypoints) {
-        this.waypoints = waypoints;
+    public void setFacilities(List<Facility> facilities) {
+        this.facilities = facilities;
     }
 
     public int getMapZoomLevel() {

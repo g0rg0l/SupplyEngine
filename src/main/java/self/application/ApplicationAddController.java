@@ -1,9 +1,7 @@
 package self.application;
 
-import org.jxmapviewer.viewer.GeoPosition;
-import self.map.AGISMap;
-import self.map.waypoints.MapWaypoint;
-import self.map.waypoints.MapWaypointFactory;
+import self.simulation.facilities.Facility;
+import self.simulation.facilities.FacilityFactory;
 import self.simulation.facilities.FacilityType;
 
 import java.awt.*;
@@ -22,7 +20,7 @@ public class ApplicationAddController {
         addingType = type;
 
         if (map != null) {
-            BufferedImage facilityIcon = MapWaypointFactory.INSTANCE.getImageByType(type);
+            BufferedImage facilityIcon = FacilityFactory.getImageByType(type);
 
             Cursor facilityCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                     facilityIcon,
@@ -48,13 +46,9 @@ public class ApplicationAddController {
                     viewportBounds.y + mousePoint.y + 32
             );
 
-            GeoPosition position = map.getTileFactory().pixelToGeo(fixedPoint, map.getZoom());
-
-            MapWaypoint newWaypoint = MapWaypointFactory.INSTANCE.create(addingType, position);
-            // TODO: Facility newFacility = FacilityFactory.INSTANCE.create(addingType, position);
-
-            map.addWaypoint(newWaypoint);
-            // TODO: application.addFacility(newFacility);
+            var location = map.getTileFactory().pixelToGeo(fixedPoint, map.getZoom());
+            Facility facility = FacilityFactory.create(addingType, location, map);
+            map.addFacility(facility);
 
             cancel();
         }

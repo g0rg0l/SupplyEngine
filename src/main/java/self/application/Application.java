@@ -4,7 +4,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.application.ui.CancelAddingFacilityAction;
 import self.map.routing.MapRouteFactory;
-import self.map.waypoints.MapWaypointFactory;
+import self.simulation.facilities.FacilityFactory;
 import self.simulation.Simulation;
 import self.simulation.facilities.FacilityType;
 import self.utility.SimulationConfiguration;
@@ -36,7 +36,7 @@ public class Application extends JFrame {
 
     public void createAndRunSimulation() {
         if (simulation == null || !simulation.isRunning()) {
-            SimulationConfiguration.INSTANCE.setWaypoints(map.getWaypointManager().getObjects());
+            SimulationConfiguration.INSTANCE.setFacilities(map.getFacilityManager().getObjects());
             SimulationConfiguration.INSTANCE.setRoutes(map.getRouteManager().getObjects());
 
             simulation = new Simulation();
@@ -121,7 +121,7 @@ public class Application extends JFrame {
         ));
 
         for (GeoPosition loc : locations)
-            map.addWaypoint(MapWaypointFactory.INSTANCE.create(FacilityType.CUSTOMER, loc));
+            map.addFacility(FacilityFactory.create(FacilityType.CUSTOMER, loc, map));
 
 
         for (int i = 0; i < locations.size() - 1; i++)

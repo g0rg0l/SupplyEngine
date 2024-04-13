@@ -1,8 +1,6 @@
 package self.simulation;
 
 import self.engine.Engine;
-import self.map.routing.MapRoute;
-import self.map.waypoints.MapWaypoint;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
@@ -47,16 +45,8 @@ public class Simulation extends JFrame {
         map.setCenter(SimulationConfiguration.INSTANCE.getMapCenterPoint());
 
 
-        map.setRoutes(SimulationConfiguration.INSTANCE.getRoutes()
-                .stream()
-                .map(MapRoute::new)
-                .toList()
-        );
-        map.setWaypoints(SimulationConfiguration.INSTANCE.getWaypoints()
-                .stream()
-                .map(MapWaypoint::new)
-                .toList()
-        );
+        map.setRoutes(SimulationConfiguration.INSTANCE.getRoutes());
+        map.setFacilities(SimulationConfiguration.INSTANCE.getFacilities());
 
         map.getRouteManager().getObjects().get(0).move(new RouteMovable());
         map.getRouteManager().getObjects().get(5).move(new RouteMovable());
@@ -72,6 +62,11 @@ public class Simulation extends JFrame {
     }
 
     public void update(float dt) {
+        map.getFacilityManager().getCustomers().forEach(o -> o.update(dt));
+        map.getFacilityManager().getDcs().forEach(o -> o.update(dt));
+        map.getFacilityManager().getFactories().forEach(o -> o.update(dt));
+        map.getFacilityManager().getSuppliers().forEach(o -> o.update(dt));
+
         map.getRouteManager().getObjects().forEach(r -> r.update(dt));
     }
 
