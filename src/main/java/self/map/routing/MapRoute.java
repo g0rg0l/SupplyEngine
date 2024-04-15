@@ -136,7 +136,7 @@ public class MapRoute {
         var rectangle = map.getViewportBounds();
         var points2D = getPoints2D(map.getZoom());
 
-        g2d.setColor(Color.BLUE);
+        g2d.setColor(new Color(79,76,79));
         for (int i = 1; i < points2D.size(); i++) {
             Line2D line2D = new Line2D.Double(points2D.get(i - 1), points2D.get(i));
 

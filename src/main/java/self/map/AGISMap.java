@@ -2,8 +2,17 @@ package self.map;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
+import org.jxmapviewer.WMSTileFactoryInfo;
+import org.jxmapviewer.google.GoogleMapsTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.TileFactory;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.bmng.CylindricalProjectionTileFactory;
+import org.jxmapviewer.viewer.esri.ESRITileFactory;
+import org.jxmapviewer.viewer.wms.WMSService;
+import org.jxmapviewer.viewer.wms.WMSTileFactory;
 import self.map.routing.MapRouteManager;
 import self.map.routing.MapRoutePainter;
 import self.simulation.facilities.FacilityManager;

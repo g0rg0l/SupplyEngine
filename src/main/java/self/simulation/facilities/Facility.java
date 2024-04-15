@@ -32,7 +32,6 @@ public class Facility {
 
     public void draw(Graphics2D g2d, JXMapViewer map) {
         var point = pointsDetalizationMap.get(map.getZoom());
-        System.out.println(map.getZoom());
 
         g2d.drawImage(image,
                 (int) point.getX() - image.getWidth() / 2,

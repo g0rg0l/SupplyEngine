@@ -79,7 +79,7 @@ public class Application extends JFrame {
 
         menu.setBorder(
                 BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.BLACK, 4),
+                    BorderFactory.createLineBorder(APPLICATION_DEFAULT_BORDER_COLOR, 4),
                     BorderFactory.createEmptyBorder(15, 50, 15, 50)
                 )
         );
@@ -107,7 +107,7 @@ public class Application extends JFrame {
         map.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createEmptyBorder(0, 0, 0, -4),
-                        BorderFactory.createLineBorder(Color.BLACK, 4)
+                        BorderFactory.createLineBorder(APPLICATION_DEFAULT_BORDER_COLOR, 4)
                 )
         );
 
@@ -122,7 +122,6 @@ public class Application extends JFrame {
 
         for (GeoPosition loc : locations)
             map.addFacility(FacilityFactory.create(FacilityType.CUSTOMER, loc, map));
-
 
         for (int i = 0; i < locations.size() - 1; i++)
             for (int j = i + 1; j < locations.size(); j++) {

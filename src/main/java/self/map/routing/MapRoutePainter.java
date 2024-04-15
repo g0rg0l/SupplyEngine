@@ -21,7 +21,7 @@ public class MapRoutePainter implements Painter<JXMapViewer> {
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(Color.RED);
-        g.setStroke(new BasicStroke(2));
+        g.setStroke(new BasicStroke(3));
 
         routeManager.getObjects().forEach(r -> r.draw(g, map));
         routeManager.getObjects().forEach(r -> r.getMovables().forEach(m -> m.draw(g)));

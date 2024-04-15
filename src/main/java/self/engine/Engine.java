@@ -3,6 +3,8 @@ package self.engine;
 import self.simulation.Simulation;
 
 public class Engine {
+    private float timeCoefficient = 1.f;
+
     public void run(Simulation simulation) {
         Thread gameLoop = new Thread(() -> {
             final int FRAMES_PER_SECOND = 144;
@@ -21,7 +23,7 @@ public class Engine {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     float dt = (float) elapsedTime / 1000;
-                    simulation.update(dt * 5000);
+                    simulation.update(dt * timeCoefficient);
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
                 }
@@ -44,5 +46,9 @@ public class Engine {
         });
 
         gameLoop.start();
+    }
+
+    public void setTimeCoefficient(float timeCoefficient) {
+        this.timeCoefficient = timeCoefficient;
     }
 }
