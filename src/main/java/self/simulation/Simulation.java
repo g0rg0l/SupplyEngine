@@ -18,18 +18,24 @@ public class Simulation extends JFrame implements ActionListener {
     private final TimeManager timeManager;
     private boolean isRunning;
 
+    private double t = 0;
+
     public Simulation() {
         super("Simulation");
 
-        this.engine = new Engine();
+        this.engine = new Engine(SimulationConfiguration.INSTANCE.getTimeUnit());
         this.gui = new SimulationGUI(this);
         this.timeManager = new TimeManager();
         this.isRunning = false;
 
         createAndShowGUI();
+
+        for (int i = 0; i < 6; i++)
+            map.getRouteManager().getObjects().get(i).move(new RouteMovable());
     }
 
     public void update(float dt) {
+        t += dt;
         timeManager.update(dt);
 
         map.getFacilityManager().getCustomers().forEach(o -> o.update(dt));
@@ -38,6 +44,13 @@ public class Simulation extends JFrame implements ActionListener {
         map.getFacilityManager().getSuppliers().forEach(o -> o.update(dt));
 
         map.getRouteManager().getObjects().forEach(r -> r.update(dt));
+
+        if (t > 1500) {
+            t = 0;
+
+            for (int i = 0; i < 6; i++)
+                map.getRouteManager().getObjects().get(i).move(new RouteMovable());
+        }
 
         gui.updateDate(timeManager.format(timeManager.date()));
     }
@@ -79,18 +92,13 @@ public class Simulation extends JFrame implements ActionListener {
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
         map.setPreferredSize(SIMULATION_DEFAULT_SIZE);
         map.setMinimumSize(SIMULATION_MINIMUM_SIZE);
-
         map.setZoom(SimulationConfiguration.INSTANCE.getMapZoomLevel());
         map.setCenter(SimulationConfiguration.INSTANCE.getMapCenterPoint());
 
+        map.isInitialized = true;
+
         map.setRoutes(SimulationConfiguration.INSTANCE.getRoutes());
         map.setFacilities(SimulationConfiguration.INSTANCE.getFacilities());
-
-        map.getRouteManager().getObjects().get(0).move(new RouteMovable());
-        map.getRouteManager().getObjects().get(5).move(new RouteMovable());
-        map.getRouteManager().getObjects().get(9).move(new RouteMovable());
-        map.getRouteManager().getObjects().get(12).move(new RouteMovable());
-        map.getRouteManager().getObjects().get(14).move(new RouteMovable());
 
         pane.add(map, BorderLayout.CENTER);
     }

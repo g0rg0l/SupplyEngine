@@ -4,14 +4,20 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.AGISMap;
 import self.simulation.facilities.Facility;
+import self.simulation.facilities.FacilityFactory;
+import self.simulation.facilities.FacilityType;
 import self.simulation.facilities.IUpdatable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Supplier extends Facility implements IUpdatable {
-    public Supplier(BufferedImage image, GeoPosition geoPosition, AGISMap map) {
-        super(image, geoPosition, map);
+    public Supplier(GeoPosition geoPosition, AGISMap map) {
+        super(
+                FacilityFactory.getImageByType(FacilityType.SUPPLIER),
+                FacilityFactory.getSelectedImageByType(FacilityType.SUPPLIER),
+                geoPosition,
+                map
+        );
     }
 
     public Supplier(Facility that) {

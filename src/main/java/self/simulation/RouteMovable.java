@@ -92,9 +92,13 @@ public class RouteMovable {
     }
 
     private Point2D getNextPointToMove() {
-        for (int i = 0; i < route.getPoints2D().size(); i++) {
-            if (route.getPoints2D().get(i).equals(next) && i != route.getPoints2D().size() - 1)
-                return route.getPoints2D().get(i + 1);
+
+
+        var points = route.getPoints2D();
+
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).equals(next) && i != points.size() - 1)
+                return points.get(i + 1);
         }
 
         return null;

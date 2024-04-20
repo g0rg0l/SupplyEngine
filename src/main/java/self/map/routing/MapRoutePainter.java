@@ -23,8 +23,16 @@ public class MapRoutePainter implements Painter<JXMapViewer> {
         g.setColor(Color.RED);
         g.setStroke(new BasicStroke(3));
 
-        routeManager.getObjects().forEach(r -> r.draw(g, map));
-        routeManager.getObjects().forEach(r -> r.getMovables().forEach(m -> m.draw(g)));
+        var routes = routeManager.getObjects();
+        for (int i = 0; i < routes.size(); i++) {
+            var route = routes.get(i);
+            var movables = route.getMovables();
+
+            route.draw(g, map);
+            for (int j = 0; j < movables.size(); j++) {
+                movables.get(j).draw(g);
+            }
+        }
 
         g.dispose();
     }

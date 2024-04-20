@@ -1,7 +1,9 @@
 package self.application;
 
+import self.engine.TimeUnit;
 import self.simulation.facilities.FacilityType;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,10 +18,24 @@ public class ApplicationActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "start simulation command" -> application.createAndRunSimulation();
-            case "add customer command" -> application.applicationAddController.select(FacilityType.CUSTOMER);
-            case "add dc command" -> application.applicationAddController.select(FacilityType.DC);
-            case "add factory command" -> application.applicationAddController.select(FacilityType.FACTORY);
-            case "add supplier command" -> application.applicationAddController.select(FacilityType.SUPPLIER);
+            case "add customer command" -> application.applicationAddController.selectFacility(FacilityType.CUSTOMER);
+            case "add dc command" -> application.applicationAddController.selectFacility(FacilityType.DC);
+            case "add factory command" -> application.applicationAddController.selectFacility(FacilityType.FACTORY);
+            case "add route command" -> application.applicationAddController.selectRoute();
+            case "add supplier command" -> application.applicationAddController.selectFacility(FacilityType.SUPPLIER);
+            case "show routes command" -> application.applicationGUI.showRoutes();
+            case "hide routes command" -> application.applicationGUI.hideRoutes();
+            case "change time unit command" -> changeTimeUnit(e);
+        }
+    }
+
+    private void changeTimeUnit(ActionEvent e) {
+        if (e.getSource() instanceof JComboBox<?> applicationTimeUnitComboBox) {
+            var timeUnitString = (String) applicationTimeUnitComboBox.getSelectedItem();
+
+            if (timeUnitString != null) {
+                application.timeUnit = TimeUnit.getFromString(timeUnitString);
+            }
         }
     }
 }

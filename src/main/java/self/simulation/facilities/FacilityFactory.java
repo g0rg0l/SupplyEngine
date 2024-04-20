@@ -13,10 +13,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class FacilityFactory {
-    private static BufferedImage CUSTOMER_ICON;
-    private static BufferedImage DC_ICON;
-    private static BufferedImage FACTORY_ICON;
-    private static BufferedImage SUPPLIER_ICON;
+    public static BufferedImage CUSTOMER_ICON;
+    public static BufferedImage DC_ICON;
+    public static BufferedImage FACTORY_ICON;
+    public static BufferedImage SUPPLIER_ICON;
+    public static BufferedImage CUSTOMER_SELECTED_ICON;
+    public static BufferedImage DC_SELECTED_ICON;
+    public static BufferedImage FACTORY_SELECTED_ICON;
+    public static BufferedImage SUPPLIER_SELECTED_ICON;
 
     static {
         try {
@@ -24,6 +28,10 @@ public class FacilityFactory {
             DC_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/dc.png")));
             FACTORY_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/factory.png")));
             SUPPLIER_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/supplier.png")));
+            CUSTOMER_SELECTED_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/customer_selected.png")));
+            DC_SELECTED_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/dc_selected.png")));
+            FACTORY_SELECTED_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/factory_selected.png")));
+            SUPPLIER_SELECTED_ICON = ImageIO.read(Objects.requireNonNull(FacilityFactory.class.getResource("/facilities/supplier_selected.png")));
         }
         catch (IOException e) {
             System.out.println("Error while loading resources: can not load waypoint icons.");
@@ -33,10 +41,10 @@ public class FacilityFactory {
 
     public static Facility create(FacilityType type, GeoPosition position, AGISMap map) {
         switch (type) {
-            case CUSTOMER -> { return new Customer(CUSTOMER_ICON, position, map); }
-            case DC ->       { return new DC(DC_ICON, position, map);             }
-            case FACTORY ->  { return new Factory(FACTORY_ICON, position, map);   }
-            case SUPPLIER -> { return new Supplier(SUPPLIER_ICON, position, map); }
+            case CUSTOMER -> { return new Customer(position, map); }
+            case DC ->       { return new DC(position, map);             }
+            case FACTORY ->  { return new Factory(position, map);   }
+            case SUPPLIER -> { return new Supplier(position, map); }
         }
 
         return null;
@@ -48,6 +56,17 @@ public class FacilityFactory {
             case DC ->       { return DC_ICON;       }
             case FACTORY ->  { return FACTORY_ICON;  }
             case SUPPLIER -> { return SUPPLIER_ICON; }
+        }
+
+        return null;
+    }
+
+    public static BufferedImage getSelectedImageByType(FacilityType type) {
+        switch (type) {
+            case CUSTOMER -> { return CUSTOMER_SELECTED_ICON; }
+            case DC ->       { return DC_SELECTED_ICON;       }
+            case FACTORY ->  { return FACTORY_SELECTED_ICON;  }
+            case SUPPLIER -> { return SUPPLIER_SELECTED_ICON; }
         }
 
         return null;

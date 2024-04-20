@@ -4,6 +4,9 @@ import self.map.AGISMap;
 import self.map.routing.MapRoute;
 import self.simulation.facilities.Facility;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+
 
 public final class ApplicationGISMap extends AGISMap {
 

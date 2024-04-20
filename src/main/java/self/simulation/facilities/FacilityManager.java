@@ -6,14 +6,18 @@ import self.simulation.facilities.objects.DC;
 import self.simulation.facilities.objects.Factory;
 import self.simulation.facilities.objects.Supplier;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class FacilityManager extends AManager<Facility> {
     private List<Customer> customers;
     private List<Supplier> suppliers;
     private List<DC> dcs;
     private List<Factory> factories;
+    private Map<Integer, List<Rectangle2D>> zoomToHitBoxes;
 
     public FacilityManager() {
         super();
@@ -22,6 +26,7 @@ public final class FacilityManager extends AManager<Facility> {
         this.suppliers = new ArrayList<>();
         this.dcs = new ArrayList<>();
         this.factories = new ArrayList<>();
+        this.zoomToHitBoxes = new HashMap<>();
     }
 
     public List<Customer> getCustomers() {
@@ -54,5 +59,21 @@ public final class FacilityManager extends AManager<Facility> {
 
     public void setFactories(List<Factory> factories) {
         this.factories = factories;
+    }
+
+    public List<Rectangle2D> getHitBoxes(int zoom) {
+        List<Rectangle2D> hitBoxes = new ArrayList<>();
+
+        for (Facility facility : objects) {
+            var point = facility.getPosition(zoom);
+            var image = facility.getImage();
+
+            hitBoxes.add(new Rectangle2D.Double(
+                    point.getX() - image.getWidth() / 2.0, point.getY() - image.getHeight(),
+                    image.getWidth(), image.getHeight()
+            ));
+        }
+
+        return hitBoxes;
     }
 }

@@ -36,7 +36,10 @@ public class ApplicationGISMapMouseAdaptor extends AGISMapMouseAdapter {
         super.mouseClicked(e);
 
         if (e.getButton() == MouseEvent.BUTTON3) {
-            application.applicationAddController.add(e.getPoint());
+            application.applicationAddController.addFacility(e.getPoint());
+        }
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            application.applicationAddController.addRoute(e.getPoint());
         }
     }
 }

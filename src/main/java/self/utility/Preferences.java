@@ -19,20 +19,19 @@ public class Preferences {
 
     public static final Dimension SIMULATION_MENU_DEFAULT_SIZE = new Dimension(800, 50);
 
-    public static final Dimension APPLICATION_HEADER_ADD_BUTTONS_DEFAULT_SIZE = new Dimension(189, 36);
-
 
 
     /* COLORS */
-    public static final Color GIS_MAP_DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+    public static final Color GIS_MAP_DEFAULT_BACKGROUND_COLOR = Color.LIGHT_GRAY;
 
-    public static final Color APPLICATION_HEADER_DEFAULT_COLOR = Color.GRAY;
+    public static final Color APPLICATION_HEADER_DEFAULT_COLOR = new Color(238,236,233);
 
-    public static final Color APPLICATION_MENU_DEFAULT_COLOR = Color.LIGHT_GRAY;
+    public static final Color APPLICATION_MENU_DEFAULT_COLOR = new Color(238,236,233);
 
     public static final Color SIMULATION_MENU_DEFAULT_COLOR = new Color(238,236,233);
 
-    public static final Color APPLICATION_DEFAULT_BORDER_COLOR = Color.WHITE;
+    public static final Color APPLICATION_DEFAULT_BORDER_COLOR = Color.BLACK;
+    public static final int APPLICATION_DEFAULT_BORDER_SIZE = 4;
 
 
 

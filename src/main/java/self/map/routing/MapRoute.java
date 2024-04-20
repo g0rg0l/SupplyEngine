@@ -8,10 +8,8 @@ import self.simulation.RouteMovable;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class MapRoute {
     private final List<GeoPosition> originalPoints;
@@ -112,12 +110,13 @@ public class MapRoute {
     }
 
     public void update(float dt) {
-        movables.forEach(m -> m.update(dt));
-        movables.removeAll(
-                movables.stream()
-                        .filter(RouteMovable::isFinished)
-                        .toList()
-        );
+        for (int i = 0; i < movables.size(); i++) {
+            movables.get(i).update(dt);
+        }
+
+        movables.removeAll(movables.stream()
+                .filter(RouteMovable::isFinished)
+                .toList());
     }
 
     /**
@@ -128,7 +127,9 @@ public class MapRoute {
      * @param zoom Новый уровень детализации карты
      */
     public void setZoom(int zoom) {
-        movables.forEach(o -> o.recalculatePositionOnNewZoom(zoom));
+        for (int i = 0; i < movables.size(); i++) {
+            movables.get(i).recalculatePositionOnNewZoom(zoom);
+        }
         this.zoom = zoom;
     }
 
@@ -136,7 +137,8 @@ public class MapRoute {
         var rectangle = map.getViewportBounds();
         var points2D = getPoints2D(map.getZoom());
 
-        g2d.setColor(new Color(79,76,79));
+        g2d.setColor(new Color(100,100,100));
+
         for (int i = 1; i < points2D.size(); i++) {
             Line2D line2D = new Line2D.Double(points2D.get(i - 1), points2D.get(i));
 
