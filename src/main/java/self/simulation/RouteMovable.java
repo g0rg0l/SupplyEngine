@@ -5,10 +5,12 @@ import self.map.routing.MapRoute;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ListIterator;
 
 public class RouteMovable {
-    private Point2D current;
-    private Point2D next;
+    private Point2D currentPosition;
+    private Point2D targetPosition;
+    private ListIterator<Point2D> next;
     private MapRoute route;
     private double time;
     private double speed;
@@ -16,26 +18,31 @@ public class RouteMovable {
 
     public void update(float dt) {
         time += dt;
-        var distToMove = dt * speed;
 
-        while (distToMove > current.distance(next)) {
-            distToMove -= current.distance(next);
+        double distToMove = dt * speed;
+        double distToNext = currentPosition.distance(targetPosition);
+        while (distToMove > distToNext) {
+            distToMove -= distToNext;
 
-            current.setLocation(next);
-            var newNext = getNextPointToMove();
-            if (newNext != null) next = newNext;
+            currentPosition = targetPosition;
+            if (next.hasNext()) {
+                targetPosition = (Point2D) next.next().clone();
+            }
             else {
                 isFinished = true;
                 return;
             }
+
+            distToNext = currentPosition.distance(targetPosition);
         }
 
-        move(current, next, distToMove);
+        move(distToMove);
     }
 
-    public void setup(MapRoute route, Point2D current, Point2D next, double speed) {
-        this.current = (Point2D) current.clone();
-        this.next = (Point2D) next.clone();
+    public void setup(MapRoute route, ListIterator<Point2D> currentPoint, double speed) {
+        this.currentPosition = (Point2D) currentPoint.next().clone();
+        this.targetPosition = (Point2D) currentPoint.next().clone();
+        this.next = currentPoint;
         this.speed = speed;
         this.route = route;
     }
@@ -49,34 +56,34 @@ public class RouteMovable {
             double d = newPoints.get(i - 1).distance(newPoints.get(i));
 
             if ((dist + d) / route.getPixelDistance(zoom) >= routeCompleteRatio) {
-                var newStartPoint = (Point2D) route.getPoints2D(zoom).get(i - 1).clone();
-                var newTargetPoint = (Point2D) route.getPoints2D(zoom).get(i).clone();
                 double speedInPixelsInSec = route.getPixelDistance(zoom) / route.getOriginalTime();
+                setup(route, newPoints.listIterator(i - 1), speedInPixelsInSec);
 
                 double afterStartDistInPixels = routeCompleteRatio * route.getPixelDistance(zoom) - dist;
-                move(newStartPoint, newTargetPoint, afterStartDistInPixels);
+                move(afterStartDistInPixels);
 
-                setup(route, newStartPoint, newTargetPoint, speedInPixelsInSec);
                 return;
             }
             else dist += d;
         }
     }
 
-    private void move(Point2D from, Point2D to, double accelerationValue) {
+    private void move(double accelerationValue) {
         var ds = new Point2D.Double(
-                to.getX() - from.getX(),
-                to.getY() - from.getY()
+                targetPosition.getX() - currentPosition.getX(),
+                targetPosition.getY() - currentPosition.getY()
         );
-        var ds_length = from.distance(to);
+
+        var ds_length = currentPosition.distance(targetPosition);
+
         var ds_normalized = new Point2D.Double(
                 ds.getX() / ds_length,
                 ds.getY() / ds_length
         );
 
-        from.setLocation(
-                from.getX() + ds_normalized.getX() * accelerationValue,
-                from.getY() + ds_normalized.getY() * accelerationValue
+        currentPosition.setLocation(
+                currentPosition.getX() + ds_normalized.getX() * accelerationValue,
+                currentPosition.getY() + ds_normalized.getY() * accelerationValue
         );
     }
 
@@ -85,23 +92,10 @@ public class RouteMovable {
         g2d.setColor(Color.MAGENTA.darker());
 
         g2d.fillOval(
-                (int) current.getX() - size / 2,
-                (int) current.getY() - size / 2,
+                (int) currentPosition.getX() - size / 2,
+                (int) currentPosition.getY() - size / 2,
                 size, size
         );
-    }
-
-    private Point2D getNextPointToMove() {
-
-
-        var points = route.getPoints2D();
-
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).equals(next) && i != points.size() - 1)
-                return points.get(i + 1);
-        }
-
-        return null;
     }
 
     public boolean isFinished() {

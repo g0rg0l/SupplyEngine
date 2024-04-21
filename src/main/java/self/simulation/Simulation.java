@@ -1,6 +1,7 @@
 package self.simulation;
 
 import self.engine.Engine;
+import self.engine.TimeManager;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
@@ -18,41 +19,30 @@ public class Simulation extends JFrame implements ActionListener {
     private final TimeManager timeManager;
     private boolean isRunning;
 
-    private double t = 0;
-
     public Simulation() {
         super("Simulation");
 
-        this.engine = new Engine(SimulationConfiguration.INSTANCE.getTimeUnit());
+        this.engine = new Engine();
         this.gui = new SimulationGUI(this);
         this.timeManager = new TimeManager();
         this.isRunning = false;
 
         createAndShowGUI();
+    }
 
-        for (int i = 0; i < 6; i++)
-            map.getRouteManager().getObjects().get(i).move(new RouteMovable());
+    public void staticUpdate() {
+        gui.updateDate(timeManager.format(timeManager.date()));
     }
 
     public void update(float dt) {
-        t += dt;
         timeManager.update(dt);
+
+        map.getRouteManager().getObjects().forEach(r -> r.update(dt));
 
         map.getFacilityManager().getCustomers().forEach(o -> o.update(dt));
         map.getFacilityManager().getDcs().forEach(o -> o.update(dt));
         map.getFacilityManager().getFactories().forEach(o -> o.update(dt));
         map.getFacilityManager().getSuppliers().forEach(o -> o.update(dt));
-
-        map.getRouteManager().getObjects().forEach(r -> r.update(dt));
-
-        if (t > 1500) {
-            t = 0;
-
-            for (int i = 0; i < 6; i++)
-                map.getRouteManager().getObjects().get(i).move(new RouteMovable());
-        }
-
-        gui.updateDate(timeManager.format(timeManager.date()));
     }
 
     public void start() {

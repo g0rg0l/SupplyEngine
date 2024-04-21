@@ -1,9 +1,7 @@
 package self.application;
 
-import self.engine.TimeUnit;
 import self.simulation.facilities.FacilityType;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,17 +23,6 @@ public class ApplicationActionListener implements ActionListener {
             case "add supplier command" -> application.applicationAddController.selectFacility(FacilityType.SUPPLIER);
             case "show routes command" -> application.applicationGUI.showRoutes();
             case "hide routes command" -> application.applicationGUI.hideRoutes();
-            case "change time unit command" -> changeTimeUnit(e);
-        }
-    }
-
-    private void changeTimeUnit(ActionEvent e) {
-        if (e.getSource() instanceof JComboBox<?> applicationTimeUnitComboBox) {
-            var timeUnitString = (String) applicationTimeUnitComboBox.getSelectedItem();
-
-            if (timeUnitString != null) {
-                application.timeUnit = TimeUnit.getFromString(timeUnitString);
-            }
         }
     }
 }

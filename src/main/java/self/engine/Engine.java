@@ -3,13 +3,8 @@ package self.engine;
 import self.simulation.Simulation;
 
 public class Engine {
-    private float timeCoefficient;
-    private final TimeUnit timeUnit;
-
-    public Engine(TimeUnit timeUnit) {
-        this.timeUnit = timeUnit;
-        this.timeCoefficient = 1f;
-    }
+    private float timeCoefficient = 1f;
+    private static final float MAX_DELTA_TIME = 1f;
 
     public void run(Simulation simulation) {
         Thread gameLoop = new Thread(() -> {
@@ -29,10 +24,19 @@ public class Engine {
                 int updateCount = 0;
                 while (now - lastUpdateTime >= TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BETWEEN_RENDER) {
                     float dtSeconds = (float) elapsedTime / 1000;
-                    simulation.update(dtSeconds * timeCoefficient * timeUnit.coefficient);
+                    float stepModelTime = dtSeconds * timeCoefficient;
+                    simulation.staticUpdate();
+
+                    while(stepModelTime > MAX_DELTA_TIME) {
+                        simulation.update(MAX_DELTA_TIME);
+
+                        stepModelTime -= MAX_DELTA_TIME;
+                    }
+                    if (stepModelTime > 0)
+                        simulation.update(stepModelTime);
+
                     lastUpdateTime += TIME_BETWEEN_UPDATES;
                     updateCount++;
-                    System.out.println(dtSeconds);
                 }
 
                 /* Waiting for needed time to this frame */

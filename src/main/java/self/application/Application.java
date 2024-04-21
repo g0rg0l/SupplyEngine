@@ -1,7 +1,6 @@
 package self.application;
 
 import org.jxmapviewer.viewer.GeoPosition;
-import self.application.ui.ApplicationButton;
 import self.application.ui.ApplicationGUI;
 import self.application.ui.CancelAddingFacilityAction;
 import self.engine.TimeUnit;
@@ -13,7 +12,6 @@ import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -44,7 +42,6 @@ public class Application extends JFrame {
         if (simulation == null || !simulation.isRunning()) {
             SimulationConfiguration.INSTANCE.setFacilities(map.getFacilityManager().getObjects());
             SimulationConfiguration.INSTANCE.setRoutes(map.getRouteManager().getObjects());
-            SimulationConfiguration.INSTANCE.setTimeUnit(timeUnit);
 
             simulation = new Simulation();
             simulation.start();

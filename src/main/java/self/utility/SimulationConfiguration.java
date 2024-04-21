@@ -1,6 +1,5 @@
 package self.utility;
 
-import self.engine.TimeUnit;
 import self.map.routing.MapRoute;
 import self.simulation.facilities.Facility;
 
@@ -15,7 +14,6 @@ public class SimulationConfiguration {
     private Point2D mapCenterPoint;
     private List<MapRoute> routes;
     private List<Facility> facilities;
-    private TimeUnit timeUnit;
 
     public List<MapRoute> getRoutes() {
         return routes;
@@ -47,13 +45,5 @@ public class SimulationConfiguration {
 
     public void setMapCenterPoint(Point2D mapCenterPoint) {
         this.mapCenterPoint = mapCenterPoint;
-    }
-
-    public TimeUnit getTimeUnit() {
-        return timeUnit;
-    }
-
-    public void setTimeUnit(TimeUnit timeUnit) {
-        this.timeUnit = timeUnit;
     }
 }

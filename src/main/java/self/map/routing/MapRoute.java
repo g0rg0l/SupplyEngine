@@ -101,22 +101,25 @@ public class MapRoute {
      * @param movable - Принимаемый для движения объект.
      */
     public void move(RouteMovable movable) {
-        var startPoint = points2DDetalizationMap.get(zoom).get(0);
-        var targetPoint = points2DDetalizationMap.get(zoom).get(1);
+        var targetToNext = points2DDetalizationMap.get(zoom).listIterator(1);
         var speedInPixelsInSec = distanceInPixelsDetalizationMap.get(zoom) / originalTime;
 
-        movable.setup(this, startPoint, targetPoint, speedInPixelsInSec);
+        movable.setup(this, targetToNext, speedInPixelsInSec);
         movables.add(movable);
     }
 
     public void update(float dt) {
-        for (int i = 0; i < movables.size(); i++) {
-            movables.get(i).update(dt);
-        }
+        var finished = new ArrayList<RouteMovable>();
 
-        movables.removeAll(movables.stream()
-                .filter(RouteMovable::isFinished)
-                .toList());
+        for (int i = 0; i < movables.size(); i++) {
+            var movable = movables.get(i);
+
+            movable.update(dt);
+            if (movable.isFinished()) {
+                finished.add(movable);
+            }
+        }
+        movables.removeAll(finished);
     }
 
     /**
@@ -155,19 +158,7 @@ public class MapRoute {
         return points2DDetalizationMap.get(zoom);
     }
 
-    public List<GeoPosition> getGeoPoints() {
-        return getGeoPoints(zoom);
-    }
-
-    public List<Point2D> getPoints2D() {
-        return getPoints2D(zoom);
-    }
-
     public double getPixelDistance(int zoom) {
-        return distanceInPixelsDetalizationMap.get(zoom);
-    }
-
-    public double getPixelDistance() {
         return distanceInPixelsDetalizationMap.get(zoom);
     }
 

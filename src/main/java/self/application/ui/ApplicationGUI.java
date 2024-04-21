@@ -5,7 +5,6 @@ import self.application.Application;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Objects;
 
 import static self.utility.Preferences.*;
@@ -99,25 +98,6 @@ public class ApplicationGUI {
         JPanel headerRight = new JPanel();
         headerRight.setPreferredSize(new Dimension(390, 50));
         headerRight.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-        var timeUnitWrapper = new JPanel();
-        try {
-            var bi = ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/time_unit_button.png")));
-            timeUnitWrapper.add(new JLabel(new ImageIcon(bi)));
-        }
-        catch (IOException e) {
-            System.out.println("Error while loading resources: can not load button icons.");
-            System.exit(-1);
-        }
-        headerRight.add(timeUnitWrapper);
-
-        var comboboxWrapper = new JPanel();
-        String[] timeUnits = {"seconds", "minutes", "hours"};
-        var timeUnitComboBox = new JComboBox<>(timeUnits);
-        timeUnitComboBox.addActionListener(application.actionListener);
-        timeUnitComboBox.setActionCommand("change time unit command");
-        comboboxWrapper.add(timeUnitComboBox);
-        headerRight.add(comboboxWrapper);
 
         header.add(headerRight, BorderLayout.LINE_END);
 
