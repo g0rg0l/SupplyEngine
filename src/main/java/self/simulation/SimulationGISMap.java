@@ -21,32 +21,16 @@ public final class SimulationGISMap extends AGISMap {
      * @param facilities Список абстрактных Facility для добавления в симуляцию
      */
     public void setFacilities(List<Facility> facilities) {
-        List<Customer> customers = new ArrayList<>();
-        List<Supplier> suppliers = new ArrayList<>();
-        List<DC>             dcs = new ArrayList<>();
-        List<Factory>  factories = new ArrayList<>();
+        var objects = new ArrayList<Facility>();
 
         for (Facility facility : facilities) {
-            if (facility instanceof Customer)
-                customers.add(new Customer(facility));
-
-            if (facility instanceof DC)
-                dcs.add(new DC(facility));
-
-            if (facility instanceof Factory)
-                factories.add(new Factory(facility));
-
-            if (facility instanceof Supplier)
-                suppliers.add(new Supplier(facility));
+            if (facility instanceof Customer) objects.add(new Customer(facility));
+            if (facility instanceof DC) objects.add(new DC(facility));
+            if (facility instanceof Factory) objects.add(new Factory(facility));
+            if (facility instanceof Supplier) objects.add(new Supplier(facility));
         }
 
-        facilityManager.setCustomers(customers);
-        facilityManager.setDcs(dcs);
-        facilityManager.setSuppliers(suppliers);
-        facilityManager.setFactories(factories);
-
-        var objects = facilities.stream().map(Facility::new).toList();
-        facilityManager.setObjects(objects);
+        objects.forEach(facilityManager::addObject);
     }
 
     /**

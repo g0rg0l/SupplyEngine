@@ -4,6 +4,7 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
 import self.map.AGISMap;
+import self.simulation.facilities.properties.PropertiesPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,12 @@ public class Facility {
     private final BufferedImage selectedImage;
     private final GeoPosition geoPosition;
     private final Map<Integer, Point2D> pointsDetalizationMap;
+    protected final int id;
+    protected PropertiesPanel propertiesPanel;
     public boolean selected;
 
-    public Facility(BufferedImage image, BufferedImage selectedImage, GeoPosition geoPosition, AGISMap map) {
+    public Facility(int id, BufferedImage image, BufferedImage selectedImage, GeoPosition geoPosition, AGISMap map) {
+        this.id = id;
         this.image = image;
         this.selectedImage = selectedImage;
         this.geoPosition = geoPosition;
@@ -30,6 +34,7 @@ public class Facility {
 
 
     public Facility(Facility that) {
+        this.id = that.id;
         this.selected = that.selected;
         this.image = that.image;
         this.selectedImage = that.selectedImage;
@@ -57,6 +62,14 @@ public class Facility {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public void setPropertiesPanel(PropertiesPanel propertiesPanel) {
+        this.propertiesPanel = propertiesPanel;
+    }
+
+    public PropertiesPanel getPropertiesPanel() {
+        return propertiesPanel;
     }
 
     private void init(AGISMap map) {

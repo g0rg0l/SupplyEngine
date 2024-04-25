@@ -11,8 +11,9 @@ import self.simulation.facilities.IUpdatable;
 import java.awt.*;
 
 public class Factory extends Facility implements IUpdatable {
-    public Factory(GeoPosition geoPosition, AGISMap map) {
+    public Factory(int id, GeoPosition geoPosition, AGISMap map) {
         super(
+                id,
                 FacilityFactory.getImageByType(FacilityType.FACTORY),
                 FacilityFactory.getSelectedImageByType(FacilityType.FACTORY),
                 geoPosition,

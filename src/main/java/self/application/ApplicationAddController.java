@@ -124,6 +124,10 @@ public class ApplicationAddController {
         }
     }
 
+    public boolean isActive() {
+        return isAddingRoute || addingType != null;
+    }
+
     public void setMap(ApplicationGISMap map) {
         this.map = map;
     }

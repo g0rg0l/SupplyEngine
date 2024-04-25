@@ -14,6 +14,7 @@ public class ApplicationGUI {
     private final Application application;
     private ApplicationButton showRoutesButton;
     private ApplicationButton hideRoutesButton;
+    private JPanel propertiesPanel;
 
     public ApplicationGUI(Application application) {
         this.application = application;
@@ -107,27 +108,30 @@ public class ApplicationGUI {
     public void createMenu(Container pane) {
         JPanel menu = new JPanel();
         menu.setPreferredSize(APPLICATION_MENU_DEFAULT_SIZE);
-        menu.setBackground(APPLICATION_MENU_DEFAULT_COLOR);
+        menu.setBackground(Color.RED);
         menu.setLayout(new BorderLayout());
 
-        menu.setBorder(
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createEmptyBorder(),
-                        BorderFactory.createEmptyBorder(15, 50, 15, 50)
-                )
-        );
-
+        JPanel menuFooter = new JPanel();
+        menuFooter.setLayout(new BorderLayout());
         try {
-            menu.add(
+            menuFooter.add(
                     new ApplicationButton(
                             ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/launch_simulation.png"))),
                             application.actionListener, "start simulation command")
-                    , BorderLayout.SOUTH);
+                    , BorderLayout.CENTER);
         }
         catch (Exception exception) {
             System.out.println("Error while loading resources: can not load button icons.");
             System.exit(-1);
         }
+        menu.add(menuFooter, BorderLayout.PAGE_END);
+
+
+        propertiesPanel = new JPanel();
+        propertiesPanel.setLayout(new BorderLayout());
+        propertiesPanel.setBackground(Color.BLUE);
+        menu.add(propertiesPanel, BorderLayout.CENTER);
+
 
         pane.add(menu, BorderLayout.LINE_END);
     }
@@ -140,5 +144,9 @@ public class ApplicationGUI {
     public void hideRoutes() {
         showRoutesButton.setEnabled(true);
         hideRoutesButton.setEnabled(false);
+    }
+
+    public JPanel getPropertiesPanel() {
+        return propertiesPanel;
     }
 }

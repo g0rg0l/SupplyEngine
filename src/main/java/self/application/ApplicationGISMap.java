@@ -3,6 +3,10 @@ package self.application;
 import self.map.AGISMap;
 import self.map.routing.MapRoute;
 import self.simulation.facilities.Facility;
+import self.simulation.facilities.objects.Customer;
+import self.simulation.facilities.objects.DC;
+import self.simulation.facilities.objects.Factory;
+import self.simulation.facilities.objects.Supplier;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;

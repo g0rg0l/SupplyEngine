@@ -11,8 +11,9 @@ import self.simulation.facilities.IUpdatable;
 import java.awt.*;
 
 public class Customer extends Facility implements IUpdatable {
-    public Customer(GeoPosition geoPosition, AGISMap map) {
+    public Customer(int id, GeoPosition geoPosition, AGISMap map) {
         super(
+                id,
                 FacilityFactory.getImageByType(FacilityType.CUSTOMER),
                 FacilityFactory.getSelectedImageByType(FacilityType.CUSTOMER),
                 geoPosition,

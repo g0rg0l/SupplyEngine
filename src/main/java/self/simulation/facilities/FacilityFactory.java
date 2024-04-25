@@ -6,6 +6,7 @@ import self.simulation.facilities.objects.Customer;
 import self.simulation.facilities.objects.DC;
 import self.simulation.facilities.objects.Factory;
 import self.simulation.facilities.objects.Supplier;
+import self.simulation.facilities.properties.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,6 +22,7 @@ public class FacilityFactory {
     public static BufferedImage DC_SELECTED_ICON;
     public static BufferedImage FACTORY_SELECTED_ICON;
     public static BufferedImage SUPPLIER_SELECTED_ICON;
+    public static int count;
 
     static {
         try {
@@ -39,15 +41,25 @@ public class FacilityFactory {
         }
     }
 
+    /**
+     * Метод, создающий новый фасилити. Возвращает новый объект и создаёт привязанную к нему
+     * панель пропертей, которая будет отображаться при выборе фасилити на карте в Application'е
+     */
     public static Facility create(FacilityType type, GeoPosition position, AGISMap map) {
+        Facility facility;
+
         switch (type) {
-            case CUSTOMER -> { return new Customer(position, map); }
-            case DC ->       { return new DC(position, map);             }
-            case FACTORY ->  { return new Factory(position, map);   }
-            case SUPPLIER -> { return new Supplier(position, map); }
+            case CUSTOMER -> facility = new Customer(++count, position, map);
+            case DC       -> facility = new DC(++count, position, map);
+            case FACTORY  -> facility = new Factory(++count, position, map);
+            case SUPPLIER -> facility = new Supplier(++count, position, map);
+
+            default -> { return null; }
         }
 
-        return null;
+        facility.setPropertiesPanel(createPropertiesPanel(facility));
+
+        return facility;
     }
 
     public static BufferedImage getImageByType(FacilityType type) {
@@ -68,6 +80,15 @@ public class FacilityFactory {
             case FACTORY ->  { return FACTORY_SELECTED_ICON;  }
             case SUPPLIER -> { return SUPPLIER_SELECTED_ICON; }
         }
+
+        return null;
+    }
+
+    private static PropertiesPanel createPropertiesPanel(Facility facility) {
+        if (facility instanceof Customer) return new CustomerPropertiesPanel(facility);
+        if (facility instanceof DC)       return new DCPropertiesPanel(facility);
+        if (facility instanceof Factory)  return new FactoryPropertiesPanel(facility);
+        if (facility instanceof Supplier) return new SupplierPropertiesPanel(facility);
 
         return null;
     }

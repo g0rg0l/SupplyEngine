@@ -13,11 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public final class FacilityManager extends AManager<Facility> {
-    private List<Customer> customers;
-    private List<Supplier> suppliers;
-    private List<DC> dcs;
-    private List<Factory> factories;
-    private Map<Integer, List<Rectangle2D>> zoomToHitBoxes;
+    private final List<Customer> customers;
+    private final List<Supplier> suppliers;
+    private final List<DC> dcs;
+    private final List<Factory> factories;
 
     public FacilityManager() {
         super();
@@ -26,7 +25,16 @@ public final class FacilityManager extends AManager<Facility> {
         this.suppliers = new ArrayList<>();
         this.dcs = new ArrayList<>();
         this.factories = new ArrayList<>();
-        this.zoomToHitBoxes = new HashMap<>();
+    }
+
+    @Override
+    public void addObject(Facility object) {
+        if (object instanceof Customer) customers.add((Customer) object);
+        if (object instanceof DC) dcs.add((DC) object);
+        if (object instanceof Factory) factories.add((Factory) object);
+        if (object instanceof Supplier) suppliers.add((Supplier) object);
+
+        super.addObject(object);
     }
 
     public List<Customer> getCustomers() {
@@ -43,22 +51,6 @@ public final class FacilityManager extends AManager<Facility> {
 
     public List<Factory> getFactories() {
         return factories;
-    }
-
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
-    }
-
-    public void setSuppliers(List<Supplier> suppliers) {
-        this.suppliers = suppliers;
-    }
-
-    public void setDcs(List<DC> dcs) {
-        this.dcs = dcs;
-    }
-
-    public void setFactories(List<Factory> factories) {
-        this.factories = factories;
     }
 
     public List<Rectangle2D> getHitBoxes(int zoom) {

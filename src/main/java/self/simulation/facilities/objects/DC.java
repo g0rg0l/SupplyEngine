@@ -11,8 +11,9 @@ import self.simulation.facilities.IUpdatable;
 import java.awt.*;
 
 public class DC extends Facility implements IUpdatable {
-    public DC(GeoPosition geoPosition, AGISMap map) {
+    public DC(int id, GeoPosition geoPosition, AGISMap map) {
         super(
+                id,
                 FacilityFactory.getImageByType(FacilityType.DC),
                 FacilityFactory.getSelectedImageByType(FacilityType.DC),
                 geoPosition,
