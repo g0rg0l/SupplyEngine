@@ -4,6 +4,7 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.MapUtilities;
 import self.simulation.RouteMovable;
+import self.simulation.facilities.Facility;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -12,6 +13,8 @@ import java.util.*;
 import java.util.List;
 
 public class MapRoute {
+    public final int fromID;
+    public final int toID;
     private final List<GeoPosition> originalPoints;
     private final double originalDistance;
     private final long originalTime;
@@ -23,7 +26,7 @@ public class MapRoute {
     private int zoom;
 
 
-    public MapRoute(JXMapViewer map, Path path) {
+    public MapRoute(JXMapViewer map, Path path, Facility from, Facility to) {
         this.originalPoints = path.getGeoPositions();
         this.originalDistance = path.getDistance();
         this.originalTime = path.getTime();
@@ -33,6 +36,8 @@ public class MapRoute {
         this.distanceInPixelsDetalizationMap = new HashMap<>();
         this.movables = new ArrayList<>();
         this.zoom = map.getZoom();
+        this.fromID = from.id;
+        this.toID = to.id;
 
         init(map);
     }
@@ -47,6 +52,8 @@ public class MapRoute {
         this.distanceInPixelsDetalizationMap = that.distanceInPixelsDetalizationMap;
         this.movables = new ArrayList<>();
         this.zoom = that.zoom;
+        this.fromID = that.fromID;
+        this.toID = that.toID;
     }
 
     /**
@@ -164,6 +171,10 @@ public class MapRoute {
 
     public long getOriginalTime() {
         return originalTime;
+    }
+
+    public double getOriginalDistance() {
+        return originalDistance;
     }
 
     public List<RouteMovable> getMovables() {

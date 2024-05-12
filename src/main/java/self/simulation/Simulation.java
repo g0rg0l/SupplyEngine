@@ -2,6 +2,7 @@ package self.simulation;
 
 import self.engine.Engine;
 import self.engine.TimeManager;
+import self.simulation.sourcing.SourcingManager;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
@@ -77,7 +78,10 @@ public class Simulation extends JFrame implements ActionListener {
     }
 
     private void createMap(Container pane) {
-        map = new SimulationGISMap();
+        map = new SimulationGISMap(
+                SimulationConfiguration.INSTANCE.getFacilityManager(),
+                SimulationConfiguration.INSTANCE.getRouteManager()
+        );
         map.setMouseAdapter(new SimulationGISMouseAdapter(map));
         map.setBackground(GIS_MAP_DEFAULT_BACKGROUND_COLOR);
         map.setPreferredSize(SIMULATION_DEFAULT_SIZE);
@@ -87,8 +91,7 @@ public class Simulation extends JFrame implements ActionListener {
 
         map.isInitialized = true;
 
-        map.setRoutes(SimulationConfiguration.INSTANCE.getRoutes());
-        map.setFacilities(SimulationConfiguration.INSTANCE.getFacilities());
+        SourcingManager.INSTANCE.init(map.getRouteManager(), map.getFacilityManager());
 
         pane.add(map, BorderLayout.CENTER);
     }

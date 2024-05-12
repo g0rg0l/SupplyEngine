@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class MapRoutePainter implements Painter<JXMapViewer> {
-    private final MapRouteManager routeManager;
+    private final RouteManager routeManager;
 
-    public MapRoutePainter(MapRouteManager routeManager) {
+    public MapRoutePainter(RouteManager routeManager) {
         this.routeManager = routeManager;
     }
 

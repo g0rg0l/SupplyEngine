@@ -2,6 +2,7 @@ package self.application;
 
 import self.map.AGISMap;
 import self.map.routing.MapRoute;
+import self.map.routing.MapRouteFactory;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.objects.Customer;
 import self.simulation.facilities.objects.DC;
@@ -13,27 +14,18 @@ import java.awt.geom.Rectangle2D;
 
 
 public final class ApplicationGISMap extends AGISMap {
+    public ApplicationGISMap() {
+        super();
+        setupPaintersByManagers();
+    }
 
-    /**
-     * Метод динамического добавления Facility на карту. Используется из Application'а.
-     * Происходит просто добавление абстрактного объекта с конкретным типом в
-     * Facility Manager карты
-     *
-     * @param facility Абстрактный Facility, добавляемый на карту
-     */
     public void addFacility(Facility facility) {
         facilityManager.addObject(facility);
         repaint();
     }
 
-    /**
-     * Метод динамического добавления Route на карту. Используется из Application'а.
-     * Происходит просто добавление абстрактного пути, который только рисуется на карте
-     * без какого-либо функционала.
-     *
-     * @param route Абстрактный MapRoute, добавляемый на карту
-     */
-    public void addRoute(MapRoute route) {
+    public void addRoute(Facility from, Facility to) {
+        var route = MapRouteFactory.createRoute(from, to, this);
         routeManager.addObject(route);
         repaint();
     }

@@ -3,6 +3,7 @@ package self.simulation.facilities.objects;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.AGISMap;
+import self.simulation.demand.Order;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityFactory;
 import self.simulation.facilities.FacilityType;

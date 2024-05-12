@@ -115,7 +115,7 @@ public class ApplicationAddController {
                         a.selected = false;
                         isAddingRoute = false;
 
-                        map.addRoute(MapRouteFactory.createRoute(a.getGeoPosition(), b.getGeoPosition(), map));
+                        map.addRoute(a, b);
                         break;
                     }
                 }

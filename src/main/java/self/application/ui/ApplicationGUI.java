@@ -112,24 +112,27 @@ public class ApplicationGUI {
         menu.setLayout(new BorderLayout());
 
         JPanel menuFooter = new JPanel();
+        menuFooter.setBackground(Color.RED);
         menuFooter.setLayout(new BorderLayout());
+
+        JPanel startSimulationPanel = new JPanel();
         try {
-            menuFooter.add(
+            startSimulationPanel.add(
                     new ApplicationButton(
                             ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/launch_simulation.png"))),
-                            application.actionListener, "start simulation command")
-                    , BorderLayout.CENTER);
+                            application.actionListener, "start simulation command"));
         }
         catch (Exception exception) {
             System.out.println("Error while loading resources: can not load button icons.");
             System.exit(-1);
         }
+        menuFooter.add(startSimulationPanel, BorderLayout.CENTER);
         menu.add(menuFooter, BorderLayout.PAGE_END);
 
 
         propertiesPanel = new JPanel();
         propertiesPanel.setLayout(new BorderLayout());
-        propertiesPanel.setBackground(Color.BLUE);
+        propertiesPanel.setBackground(APPLICATION_MENU_DEFAULT_COLOR);
         menu.add(propertiesPanel, BorderLayout.CENTER);
 
 

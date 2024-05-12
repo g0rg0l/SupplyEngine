@@ -65,7 +65,9 @@ public class ApplicationGISMapMouseAdaptor extends AGISMapMouseAdapter {
                 var propertiesPanel = application.applicationGUI.getPropertiesPanel();
                 propertiesPanel.removeAll();
 
-                propertiesPanel.add(facility.getPropertiesPanel());
+                var facilityPropertiesPanel = facility.getPropertiesPanel();
+                facilityPropertiesPanel.open();
+                propertiesPanel.add(facilityPropertiesPanel);
                 propertiesPanel.revalidate();
                 propertiesPanel.repaint();
             }

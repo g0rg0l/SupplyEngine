@@ -18,7 +18,7 @@ public class Facility {
     private final BufferedImage selectedImage;
     private final GeoPosition geoPosition;
     private final Map<Integer, Point2D> pointsDetalizationMap;
-    protected final int id;
+    public final int id;
     protected PropertiesPanel propertiesPanel;
     public boolean selected;
 

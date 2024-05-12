@@ -1,49 +1,30 @@
 package self.utility;
 
-import self.map.routing.MapRoute;
-import self.simulation.facilities.Facility;
+import lombok.Getter;
+import lombok.Setter;
+import self.map.routing.RouteManager;
+import self.simulation.facilities.FacilityManager;
 
 import java.awt.geom.Point2D;
-import java.util.List;
 
 public class SimulationConfiguration {
     public static final SimulationConfiguration INSTANCE = new SimulationConfiguration();
     private SimulationConfiguration() {  }
 
+    @Getter
+    @Setter
     private int mapZoomLevel;
+
+    @Getter
+    @Setter
     private Point2D mapCenterPoint;
-    private List<MapRoute> routes;
-    private List<Facility> facilities;
 
-    public List<MapRoute> getRoutes() {
-        return routes;
-    }
+    @Getter
+    @Setter
+    private FacilityManager facilityManager;
 
-    public void setRoutes(List<MapRoute> routes) {
-        this.routes = routes;
-    }
+    @Getter
+    @Setter
+    private RouteManager routeManager;
 
-    public List<Facility> getFacilities() {
-        return facilities;
-    }
-
-    public void setFacilities(List<Facility> facilities) {
-        this.facilities = facilities;
-    }
-
-    public int getMapZoomLevel() {
-        return mapZoomLevel;
-    }
-
-    public void setMapZoomLevel(int mapZoomLevel) {
-        this.mapZoomLevel = mapZoomLevel;
-    }
-
-    public Point2D getMapCenterPoint() {
-        return mapCenterPoint;
-    }
-
-    public void setMapCenterPoint(Point2D mapCenterPoint) {
-        this.mapCenterPoint = mapCenterPoint;
-    }
 }

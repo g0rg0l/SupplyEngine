@@ -23,4 +23,9 @@ public class FactoryPropertiesPanel extends PropertiesPanel {
     public void actionPerformed(ActionEvent e) {
 
     }
+
+    @Override
+    public void open() {
+
+    }
 }

@@ -4,7 +4,7 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
-import self.map.routing.MapRouteManager;
+import self.map.routing.RouteManager;
 import self.map.routing.MapRoutePainter;
 import self.simulation.facilities.FacilityManager;
 import self.simulation.facilities.MapFacilityPainter;
@@ -15,18 +15,22 @@ public abstract class AGISMap extends JXMapViewer {
     protected long lastZoomTime = 0;
     public boolean isInitialized = false;
     protected AGISMapMouseAdapter mouseAdapter;
-    protected final CompoundPainter<JXMapViewer> painter;
-    protected final MapRouteManager routeManager;
-    protected final FacilityManager facilityManager;
+    protected CompoundPainter<JXMapViewer> painter;
+    protected RouteManager routeManager;
+    protected FacilityManager facilityManager;
 
 
     public AGISMap() {
         super();
-        setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
-        this.painter = new CompoundPainter<>();
-        this.routeManager = new MapRouteManager();
-        this.facilityManager = new FacilityManager();
 
+        setTileFactory(new DefaultTileFactory(new OSMTileFactoryInfo()));
+
+        this.painter = new CompoundPainter<>();
+        this.routeManager = new RouteManager();
+        this.facilityManager = new FacilityManager();
+    }
+
+    protected void setupPaintersByManagers() {
         MapRoutePainter routePainter = new MapRoutePainter(routeManager);
         painter.addPainter(routePainter);
 
@@ -62,7 +66,7 @@ public abstract class AGISMap extends JXMapViewer {
         }
     }
 
-    public MapRouteManager getRouteManager() {
+    public RouteManager getRouteManager() {
         return routeManager;
     }
 
