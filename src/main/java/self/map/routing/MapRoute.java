@@ -1,5 +1,6 @@
 package self.map.routing;
 
+import lombok.Getter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.MapUtilities;
@@ -15,14 +16,21 @@ import java.util.List;
 public class MapRoute {
     public final int fromID;
     public final int toID;
-    private final List<GeoPosition> originalPoints;
+
+    @Getter
     private final double originalDistance;
+
+    @Getter
     private final long originalTime;
+
+    @Getter
+    private final List<RouteMovable> movables;
+
+    private final List<GeoPosition> originalPoints;
     private final Map<Integer, List<GeoPosition>> geoPointsDetalizationMap;
     private final Map<Integer, List<Point2D>> points2DDetalizationMap;
     private final Map<Integer, Double> distanceInMetersDetalizationMap;
     private final Map<Integer, Double> distanceInPixelsDetalizationMap;
-    private final List<RouteMovable> movables;
     private int zoom;
 
 
@@ -107,11 +115,13 @@ public class MapRoute {
      *
      * @param movable - Принимаемый для движения объект.
      */
-    public void move(RouteMovable movable) {
-        var targetToNext = points2DDetalizationMap.get(zoom).listIterator(1);
+    public void move(RouteMovable movable, boolean isStraight) {
+        var targetToNext = isStraight
+                ? points2DDetalizationMap.get(zoom).listIterator(0)
+                : points2DDetalizationMap.get(zoom).listIterator(points2DDetalizationMap.get(zoom).size());
         var speedInPixelsInSec = distanceInPixelsDetalizationMap.get(zoom) / originalTime;
 
-        movable.setup(this, targetToNext, speedInPixelsInSec);
+        movable.setup(this, targetToNext, speedInPixelsInSec, isStraight);
         movables.add(movable);
     }
 
@@ -167,17 +177,5 @@ public class MapRoute {
 
     public double getPixelDistance(int zoom) {
         return distanceInPixelsDetalizationMap.get(zoom);
-    }
-
-    public long getOriginalTime() {
-        return originalTime;
-    }
-
-    public double getOriginalDistance() {
-        return originalDistance;
-    }
-
-    public List<RouteMovable> getMovables() {
-        return movables;
     }
 }

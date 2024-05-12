@@ -14,6 +14,7 @@ public class RouteMovable {
     private MapRoute route;
     private double time;
     private double speed;
+    private boolean isStraight;
     private boolean isFinished;
 
     public void update(float dt) {
@@ -25,12 +26,23 @@ public class RouteMovable {
             distToMove -= distToNext;
 
             currentPosition = targetPosition;
-            if (next.hasNext()) {
-                targetPosition = (Point2D) next.next().clone();
+            if (isStraight) {
+                if (next.hasNext()) {
+                    targetPosition = (Point2D) next.next().clone();
+                }
+                else {
+                    isFinished = true;
+                    return;
+                }
             }
             else {
-                isFinished = true;
-                return;
+                if (next.hasPrevious()) {
+                    targetPosition = (Point2D) next.previous().clone();
+                }
+                else {
+                    isFinished = true;
+                    return;
+                }
             }
 
             distToNext = currentPosition.distance(targetPosition);
@@ -39,12 +51,19 @@ public class RouteMovable {
         move(distToMove);
     }
 
-    public void setup(MapRoute route, ListIterator<Point2D> currentPoint, double speed) {
-        this.currentPosition = (Point2D) currentPoint.next().clone();
-        this.targetPosition = (Point2D) currentPoint.next().clone();
+    public void setup(MapRoute route, ListIterator<Point2D> currentPoint, double speed, boolean isStraight) {
+        if (isStraight) {
+            this.currentPosition = (Point2D) currentPoint.next().clone();
+            this.targetPosition = (Point2D) currentPoint.next().clone();
+        }
+        else {
+            this.currentPosition = (Point2D) currentPoint.previous().clone();
+            this.targetPosition = (Point2D) currentPoint.previous().clone();
+        }
         this.next = currentPoint;
         this.speed = speed;
         this.route = route;
+        this.isStraight = isStraight;
     }
 
     public void recalculatePositionOnNewZoom(int zoom) {
@@ -52,19 +71,39 @@ public class RouteMovable {
 
         double dist = 0;
         var newPoints = route.getPoints2D(zoom);
-        for (int i = 1; i < newPoints.size(); i++) {
-            double d = newPoints.get(i - 1).distance(newPoints.get(i));
 
-            if ((dist + d) / route.getPixelDistance(zoom) >= routeCompleteRatio) {
-                double speedInPixelsInSec = route.getPixelDistance(zoom) / route.getOriginalTime();
-                setup(route, newPoints.listIterator(i - 1), speedInPixelsInSec);
+        if (isStraight) {
+            for (int i = 1; i < newPoints.size(); i++) {
+                double d = newPoints.get(i - 1).distance(newPoints.get(i));
 
-                double afterStartDistInPixels = routeCompleteRatio * route.getPixelDistance(zoom) - dist;
-                move(afterStartDistInPixels);
+                if ((dist + d) / route.getPixelDistance(zoom) >= routeCompleteRatio) {
+                    double speedInPixelsInSec = route.getPixelDistance(zoom) / route.getOriginalTime();
+                    setup(route, newPoints.listIterator(i - 1), speedInPixelsInSec, isStraight);
 
-                return;
+                    double afterStartDistInPixels = routeCompleteRatio * route.getPixelDistance(zoom) - dist;
+                    move(afterStartDistInPixels);
+
+                    return;
+                }
+                else dist += d;
             }
-            else dist += d;
+
+        }
+        else {
+            for (int i = newPoints.size() - 2; i >= 0; i--) {
+                double d = newPoints.get(i + 1).distance(newPoints.get(i));
+
+                if ((dist + d) / route.getPixelDistance(zoom) >= routeCompleteRatio) {
+                    double speedInPixelsInSec = route.getPixelDistance(zoom) / route.getOriginalTime();
+                    setup(route, newPoints.listIterator(i + 2), speedInPixelsInSec, isStraight);
+
+                    double afterStartDistInPixels = routeCompleteRatio * route.getPixelDistance(zoom) - dist;
+                    move(afterStartDistInPixels);
+
+                    return;
+                }
+                else dist += d;
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package self.simulation.facilities.objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.AGISMap;
@@ -16,6 +18,9 @@ import java.awt.*;
 
 public class Customer extends Facility implements IUpdatable {
     private final DemandGenerator demandGenerator;
+
+    @Getter
+    @Setter
     private SourcingType sourcingType;
 
     public Customer(int id, GeoPosition geoPosition, AGISMap map) {
@@ -38,34 +43,29 @@ public class Customer extends Facility implements IUpdatable {
     }
 
     @Override
-    public void draw(Graphics2D g2d, JXMapViewer map) {
-        super.draw(g2d, map);
-    }
-
-    @Override
     public void update(float dt) {
         demandGenerator.update(dt);
 
-        if (demandGenerator.isReadyToCreate()) {
-            Order order = demandGenerator.getOrder();
-            DC source = SourcingManager.INSTANCE.getSource(this);
-            System.out.println("dasd");
+        var order = demandGenerator.getOrder();
+        if (order != null) {
+            order.setDestination(this);
+
+            DC source = SourcingManager.INSTANCE.getSource(order);
+            if (source != null) {
+                order.setSource(source);
+                SourcingManager.INSTANCE.initPath(order);
+
+                System.out.println("new order from facility#" + id + " to facility#" + source.id);
+                source.processOrder(order);
+            }
         }
     }
 
     public void setDemandParameter(double orderCreationTime) {
-        demandGenerator.setOrderCreationTime(orderCreationTime);
+        demandGenerator.setup(orderCreationTime);
     }
 
     public double getDemandParameter() {
         return demandGenerator.getOrderCreationTime();
-    }
-
-    public SourcingType getSourcingType() {
-        return sourcingType;
-    }
-
-    public void setSourcingType(SourcingType sourcingType) {
-        this.sourcingType = sourcingType;
     }
 }

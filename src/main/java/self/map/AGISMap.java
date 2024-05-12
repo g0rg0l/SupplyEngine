@@ -1,5 +1,6 @@
 package self.map;
 
+import lombok.Getter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -16,7 +17,11 @@ public abstract class AGISMap extends JXMapViewer {
     public boolean isInitialized = false;
     protected AGISMapMouseAdapter mouseAdapter;
     protected CompoundPainter<JXMapViewer> painter;
+
+    @Getter
     protected RouteManager routeManager;
+
+    @Getter
     protected FacilityManager facilityManager;
 
 
@@ -64,13 +69,5 @@ public abstract class AGISMap extends JXMapViewer {
             super.setZoom(zoom);
             lastZoomTime = System.nanoTime();
         }
-    }
-
-    public RouteManager getRouteManager() {
-        return routeManager;
-    }
-
-    public FacilityManager getFacilityManager() {
-        return facilityManager;
     }
 }
