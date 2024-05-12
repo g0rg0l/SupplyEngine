@@ -27,4 +27,7 @@ public class SimulationConfiguration {
     @Setter
     private RouteManager routeManager;
 
+    @Getter
+    @Setter
+    private double vehicleSpeed = 40;
 }

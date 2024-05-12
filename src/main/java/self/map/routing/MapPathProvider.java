@@ -7,6 +7,7 @@ import com.graphhopper.ResponsePath;
 import com.graphhopper.config.CHProfile;
 import com.graphhopper.config.Profile;
 import org.jxmapviewer.viewer.GeoPosition;
+import self.utility.SimulationConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,12 @@ public class MapPathProvider {
         List<GeoPosition> points = new ArrayList<>();
         path.getPoints().forEach(p -> points.add(new GeoPosition(p.getLat(), p.getLon())));
 
+        double userVehicleSpeedInKilometersInHour = SimulationConfiguration.INSTANCE.getVehicleSpeed();
+        long vehicleSpeedInMetersInSecond = (long) (userVehicleSpeedInKilometersInHour * 3.6);
+
         return new Path(
                 path.getDistance(),
-                path.getTime() / 1000L,
+                (long) (path.getDistance() / vehicleSpeedInMetersInSecond),
                 points
         );
     }

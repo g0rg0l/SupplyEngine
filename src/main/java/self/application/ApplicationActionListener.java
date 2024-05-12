@@ -23,6 +23,7 @@ public class ApplicationActionListener implements ActionListener {
             case "add supplier command" -> application.applicationAddController.selectFacility(FacilityType.SUPPLIER);
             case "show routes command" -> application.applicationGUI.showRoutes();
             case "hide routes command" -> application.applicationGUI.hideRoutes();
+            case "show vehicle settings command" -> application.applicationGUI.showVehicleSettings();
         }
     }
 }

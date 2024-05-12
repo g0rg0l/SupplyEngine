@@ -1,10 +1,13 @@
 package self.simulation.sourcing;
 
+import self.map.MapUtilities;
 import self.map.routing.RouteManager;
 import self.simulation.demand.Order;
 import self.simulation.facilities.FacilityManager;
 import self.simulation.facilities.objects.Customer;
 import self.simulation.facilities.objects.DC;
+
+import java.util.Comparator;
 
 public class SourcingManager {
     public static SourcingManager INSTANCE = new SourcingManager();
@@ -21,27 +24,48 @@ public class SourcingManager {
     public DC getSource(Order order) {
         switch (order.getDestination().getSourcingType()) {
             case CLOSEST -> {
-                double minimalDistance = Double.MAX_VALUE;
-                DC dcWithMinimalDistance = null;
+                var dcsByDistance = facilityManager.getDcs()
+                        .stream()
+                        .filter(dc -> routeManager.getRouteBetween(order.getDestination(), dc) != null)
+                        .sorted((dc1, dc2) -> {
+                            double distToDC1 = MapUtilities.calculateDistanceByHaversine(
+                                    dc1.getGeoPosition().getLatitude(),
+                                    dc1.getGeoPosition().getLongitude(),
+                                    order.getDestination().getGeoPosition().getLatitude(),
+                                    order.getDestination().getGeoPosition().getLongitude()
+                            );
+                            double distToDC2 = MapUtilities.calculateDistanceByHaversine(
+                                    dc2.getGeoPosition().getLatitude(),
+                                    dc2.getGeoPosition().getLongitude(),
+                                    order.getDestination().getGeoPosition().getLatitude(),
+                                    order.getDestination().getGeoPosition().getLongitude()
+                            );
+
+                            return Double.compare(distToDC1, distToDC2);
+                        })
+                        .toList();
+
+                return dcsByDistance.stream().findFirst().orElse(null);
+            }
+
+            case FASTEST -> {
+                double minimalTravelTime = Double.MAX_VALUE;
+                DC dcWithMinimalTravelTime = null;
 
                 for (int i = 0; i < facilityManager.getDcs().size(); i++) {
                     var dc = facilityManager.getDcs().get(i);
                     var route = routeManager.getRouteBetween(order.getDestination(), dc);
 
                     if (route != null) {
-                        double dist = route.getOriginalDistance();
-                        if (dist < minimalDistance) {
-                            minimalDistance = dist;
-                            dcWithMinimalDistance = dc;
+                        double travelTime = route.getOriginalTime();
+                        if (travelTime < minimalTravelTime) {
+                            minimalTravelTime = travelTime;
+                            dcWithMinimalTravelTime = dc;
                         }
                     }
                 }
 
-                return dcWithMinimalDistance;
-            }
-
-            case FASTEST -> {
-                return null;
+                return dcWithMinimalTravelTime;
             }
 
             case CHEAPEST -> {

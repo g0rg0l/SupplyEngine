@@ -1,6 +1,8 @@
 package self.application.ui;
 
+import lombok.Getter;
 import self.application.Application;
+import self.simulation.facilities.properties.VehiclesPropertiesPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,7 +16,11 @@ public class ApplicationGUI {
     private final Application application;
     private ApplicationButton showRoutesButton;
     private ApplicationButton hideRoutesButton;
+
+    @Getter
     private JPanel propertiesPanel;
+
+    private VehiclesPropertiesPanel vehiclePropertiesPanel;
 
     public ApplicationGUI(Application application) {
         this.application = application;
@@ -99,8 +105,17 @@ public class ApplicationGUI {
         JPanel headerRight = new JPanel();
         headerRight.setPreferredSize(new Dimension(390, 50));
         headerRight.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
+        try {
+            headerRight.add(new ApplicationButton(
+                    ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/vehicle_settings.png"))),
+                    application.actionListener, "show vehicle settings command"));
+        } catch (Exception exception) {
+            System.out.println("Error while loading resources: can not load button icons.");
+            System.exit(-1);
+        }
         header.add(headerRight, BorderLayout.LINE_END);
+
+        vehiclePropertiesPanel = new VehiclesPropertiesPanel(application.map.getRouteManager());
 
         pane.add(header, BorderLayout.PAGE_START);
     }
@@ -149,7 +164,13 @@ public class ApplicationGUI {
         hideRoutesButton.setEnabled(false);
     }
 
-    public JPanel getPropertiesPanel() {
-        return propertiesPanel;
+    public void showVehicleSettings() {
+        propertiesPanel.removeAll();
+
+        vehiclePropertiesPanel.open();
+        propertiesPanel.add(vehiclePropertiesPanel);
+        propertiesPanel.revalidate();
+        propertiesPanel.repaint();
     }
+
 }

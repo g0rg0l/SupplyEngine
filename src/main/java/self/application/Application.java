@@ -18,7 +18,7 @@ public class Application extends JFrame {
     public final ApplicationAddController applicationAddController;
     public final ApplicationGUI applicationGUI;
     private Simulation simulation;
-    private ApplicationGISMap map;
+    public ApplicationGISMap map;
     public TimeUnit timeUnit;
 
     public Application(String label) {

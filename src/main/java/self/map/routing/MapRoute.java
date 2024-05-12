@@ -1,6 +1,7 @@
 package self.map.routing;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.MapUtilities;
@@ -21,7 +22,8 @@ public class MapRoute {
     private final double originalDistance;
 
     @Getter
-    private final long originalTime;
+    @Setter
+    private long originalTime;
 
     @Getter
     private final List<RouteMovable> movables;

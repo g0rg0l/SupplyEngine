@@ -24,7 +24,7 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
 
         JPanel demandGenerationPanel = new JPanel();
         demandGenerationPanel.setLayout(new FlowLayout());
-        JLabel demandLabel = new JLabel("demand:");
+        JLabel demandLabel = new JLabel("Demand: ");
         demandGenerationPanel.add(demandLabel);
         demandInput = new JTextField(10);
         demandInput.setText(String.valueOf(facility.getDemandParameter()));
@@ -37,7 +37,7 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
 
         JPanel sourcingPolicyPanel = new JPanel();
         sourcingPolicyPanel.setLayout(new FlowLayout());
-        JLabel sourcingLabel = new JLabel("sourcing policy:");
+        JLabel sourcingLabel = new JLabel("Sourcing policy:");
         sourcingPolicyPanel.add(sourcingLabel);
         var policies = new String[] {"closest", "cheapest", "fastest"};
         sourcingPolicyInput = new JComboBox<>(policies);

@@ -54,8 +54,6 @@ public class Customer extends Facility implements IUpdatable {
             if (source != null) {
                 order.setSource(source);
                 SourcingManager.INSTANCE.initPath(order);
-
-                System.out.println("new order from facility#" + id + " to facility#" + source.id);
                 source.processOrder(order);
             }
         }
