@@ -24,6 +24,7 @@ public class ApplicationActionListener implements ActionListener {
             case "show routes command" -> application.applicationGUI.showRoutes();
             case "hide routes command" -> application.applicationGUI.hideRoutes();
             case "show vehicle settings command" -> application.applicationGUI.showVehicleSettings();
+            case "show product settings command" -> application.applicationGUI.showProductSettings();
         }
     }
 }

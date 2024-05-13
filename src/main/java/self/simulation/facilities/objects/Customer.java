@@ -2,19 +2,16 @@ package self.simulation.facilities.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.AGISMap;
 import self.simulation.demand.DemandGenerator;
-import self.simulation.demand.Order;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityFactory;
 import self.simulation.facilities.FacilityType;
 import self.simulation.facilities.IUpdatable;
+import self.simulation.products.Product;
 import self.simulation.sourcing.SourcingManager;
 import self.simulation.sourcing.SourcingType;
-
-import java.awt.*;
 
 public class Customer extends Facility implements IUpdatable {
     private final DemandGenerator demandGenerator;
@@ -49,6 +46,8 @@ public class Customer extends Facility implements IUpdatable {
         var order = demandGenerator.getOrder();
         if (order != null) {
             order.setDestination(this);
+            order.setProduct(demandGenerator.getProduct());
+            order.setQuantity(demandGenerator.getQuantity());
 
             DC source = SourcingManager.INSTANCE.getSource(order);
             if (source != null) {
@@ -59,11 +58,27 @@ public class Customer extends Facility implements IUpdatable {
         }
     }
 
-    public void setDemandParameter(double orderCreationTime) {
-        demandGenerator.setup(orderCreationTime);
+    public void setDemandPeriodParameter(double orderCreationTime) {
+        demandGenerator.setOrderCreationTime(orderCreationTime);
     }
 
-    public double getDemandParameter() {
+    public double getDemandPeriodParameter() {
         return demandGenerator.getOrderCreationTime();
+    }
+
+    public void setDemandProductParameter(Product product) {
+        demandGenerator.setProduct(product);
+    }
+
+    public Product getDemandProductParameter() {
+        return demandGenerator.getProduct();
+    }
+
+    public void setDemandQuantityParameter(double quantity) {
+        demandGenerator.setQuantity(quantity);
+    }
+
+    public double getDemandQuantityParameter() {
+        return demandGenerator.getQuantity();
     }
 }

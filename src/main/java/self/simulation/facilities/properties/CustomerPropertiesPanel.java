@@ -2,7 +2,9 @@ package self.simulation.facilities.properties;
 
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.objects.Customer;
+import self.simulation.products.Product;
 import self.simulation.sourcing.SourcingType;
+import self.utility.SimulationConfiguration;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,11 @@ import java.awt.event.ActionEvent;
 public class CustomerPropertiesPanel extends PropertiesPanel {
     private final Customer facility;
     private JTextField demandInput;
+    private JTextField quantityInput;
     private JComboBox<String> sourcingPolicyInput;
+    private JPanel productPanel;
+    private JComboBox<Product> productCombobox;
+
 
     public CustomerPropertiesPanel(Facility facility) {
         super();
@@ -22,16 +28,42 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
     private void setup() {
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
+        productPanel = new JPanel();
+        productPanel.setLayout(new FlowLayout());
+        JLabel productLabel = new JLabel("Needed Product: ");
+        productPanel.add(productLabel);
+        var p = SimulationConfiguration.INSTANCE.getProducts();
+        Product[] products = new Product[p.size()];
+        products = p.toArray(products);
+        productCombobox = new JComboBox<>(products);
+        productCombobox.addActionListener(this);
+        productCombobox.setActionCommand("update demand product");
+        productPanel.add(productCombobox);
+        add(productPanel);
+
+        JPanel demandQuantityPanel = new JPanel();
+        demandQuantityPanel.setLayout(new FlowLayout());
+        JLabel demandQuantityLabel = new JLabel("Request Amount: ");
+        demandQuantityPanel.add(demandQuantityLabel);
+        quantityInput = new JTextField(10);
+        quantityInput.setText(String.valueOf(facility.getDemandQuantityParameter()));
+        demandQuantityPanel.add(quantityInput);
+        JButton saveQuantityButton = new JButton("save");
+        saveQuantityButton.setActionCommand("update quantity command");
+        saveQuantityButton.addActionListener(this);
+        demandQuantityPanel.add(saveQuantityButton);
+        add(demandQuantityPanel);
+
         JPanel demandGenerationPanel = new JPanel();
         demandGenerationPanel.setLayout(new FlowLayout());
-        JLabel demandLabel = new JLabel("Demand: ");
+        JLabel demandLabel = new JLabel("Demand Period: ");
         demandGenerationPanel.add(demandLabel);
         demandInput = new JTextField(10);
-        demandInput.setText(String.valueOf(facility.getDemandParameter()));
+        demandInput.setText(String.valueOf(facility.getDemandPeriodParameter()));
         demandGenerationPanel.add(demandInput);
         JButton saveDemandButton = new JButton("save");
-        saveDemandButton.addActionListener(this);
         saveDemandButton.setActionCommand("update demand command");
+        saveDemandButton.addActionListener(this);
         demandGenerationPanel.add(saveDemandButton);
         add(demandGenerationPanel);
 
@@ -50,17 +82,40 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("update demand command")) {
-            facility.setDemandParameter(Double.parseDouble(demandInput.getText()));
+            facility.setDemandPeriodParameter(Double.parseDouble(demandInput.getText()));
         }
         if (e.getActionCommand().equals("update sourcing policy command")) {
             facility.setSourcingType(SourcingType.getByString(
                     sourcingPolicyInput.getItemAt(sourcingPolicyInput.getSelectedIndex())
             ));
         }
+        if (e.getActionCommand().equals("update demand product")) {
+            facility.setDemandProductParameter(
+                    productCombobox.getItemAt(productCombobox.getSelectedIndex())
+            );
+        }
+        if (e.getActionCommand().equals("update quantity command")) {
+            facility.setDemandQuantityParameter(Double.parseDouble(quantityInput.getText()));
+        }
     }
 
     @Override
     public void open() {
-        demandInput.setText(String.valueOf(facility.getDemandParameter()));
+        demandInput.setText(String.valueOf(facility.getDemandPeriodParameter()));
+
+        remove(productPanel);
+        productPanel = new JPanel();
+        productPanel.setLayout(new FlowLayout());
+        JLabel productLabel = new JLabel("Demand Products: ");
+        productPanel.add(productLabel);
+        var p = SimulationConfiguration.INSTANCE.getProducts();
+        Product[] products = new Product[p.size()];
+        products = p.toArray(products);
+        productCombobox = new JComboBox<>(products);
+        productCombobox.addActionListener(this);
+        productCombobox.setActionCommand("update demand product");
+        productPanel.add(productCombobox);
+        add(productPanel, 0);
+        repaint();
     }
 }

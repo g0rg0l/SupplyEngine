@@ -2,6 +2,7 @@ package self.application.ui;
 
 import lombok.Getter;
 import self.application.Application;
+import self.simulation.facilities.properties.ProductsPropertiesPanel;
 import self.simulation.facilities.properties.VehiclesPropertiesPanel;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,7 @@ public class ApplicationGUI {
     private JPanel propertiesPanel;
 
     private VehiclesPropertiesPanel vehiclePropertiesPanel;
+    private ProductsPropertiesPanel productPropertiesPanel;
 
     public ApplicationGUI(Application application) {
         this.application = application;
@@ -109,6 +111,9 @@ public class ApplicationGUI {
             headerRight.add(new ApplicationButton(
                     ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/vehicle_settings.png"))),
                     application.actionListener, "show vehicle settings command"));
+            headerRight.add(new ApplicationButton(
+                    ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/product_settings.png"))),
+                    application.actionListener, "show product settings command"));
         } catch (Exception exception) {
             System.out.println("Error while loading resources: can not load button icons.");
             System.exit(-1);
@@ -116,6 +121,7 @@ public class ApplicationGUI {
         header.add(headerRight, BorderLayout.LINE_END);
 
         vehiclePropertiesPanel = new VehiclesPropertiesPanel(application.map.getRouteManager());
+        productPropertiesPanel = new ProductsPropertiesPanel();
 
         pane.add(header, BorderLayout.PAGE_START);
     }
@@ -173,4 +179,12 @@ public class ApplicationGUI {
         propertiesPanel.repaint();
     }
 
+    public void showProductSettings() {
+        propertiesPanel.removeAll();
+
+        productPropertiesPanel.open();
+        propertiesPanel.add(productPropertiesPanel);
+        propertiesPanel.revalidate();
+        propertiesPanel.repaint();
+    }
 }

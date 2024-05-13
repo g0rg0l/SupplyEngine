@@ -6,7 +6,6 @@ import self.utility.SimulationConfiguration;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import self.map.routing.MapRoute;
 
 public class VehiclesPropertiesPanel extends PropertiesPanel {
     private JTextField vehicleSpeedInput;

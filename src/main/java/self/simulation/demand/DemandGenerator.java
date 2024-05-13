@@ -1,11 +1,22 @@
 package self.simulation.demand;
 
 import lombok.Getter;
+import lombok.Setter;
+import self.simulation.products.Product;
 
 public class DemandGenerator {
 
     @Getter
+    @Setter
     private double orderCreationTime;
+
+    @Getter
+    @Setter
+    private Product product;
+
+    @Getter
+    @Setter
+    private double quantity;
 
     private double time;
 
@@ -23,10 +34,5 @@ public class DemandGenerator {
             return new Order();
         }
         else return null;
-    }
-
-    public void setup(double orderCreationTime) {
-        this.orderCreationTime = orderCreationTime;
-        time = 0;
     }
 }

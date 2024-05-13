@@ -9,7 +9,7 @@ public class Preferences {
 
     public static final Dimension APPLICATION_MAP_DEFAULT_SIZE = new Dimension(1000, 800);
 
-    public static final Dimension APPLICATION_MENU_DEFAULT_SIZE = new Dimension(400, 800);
+    public static final Dimension APPLICATION_MENU_DEFAULT_SIZE = new Dimension(390, 800);
 
     public static final Dimension APPLICATION_HEADER_DEFAULT_SIZE = new Dimension(1000, 50);
 
