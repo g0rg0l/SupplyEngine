@@ -3,33 +3,61 @@ package self.simulation.inventories;
 import lombok.Getter;
 import self.simulation.products.Product;
 
+@Getter
 public class Inventory {
 
-    @Getter
     private final Product product;
 
-    @Getter
-    private double available; // 100
+    private double availableAmount;
 
-    @Getter
-    private double backordered; // 0
+    private double backorderAmount;
+
+    private double reserveAmount;
 
     public Inventory(Product product, double initialStock) {
         this.product = product;
-        this.available = initialStock;
-        this.backordered = 0;
+        this.availableAmount = initialStock;
+        this.backorderAmount = 0;
+        this.reserveAmount = 0;
     }
 
-    public void reserve(double quantity) {
-        available -= quantity;
+    public Inventory(Inventory that) {
+        this.product = that.product;
+        this.availableAmount = that.availableAmount;
+        this.backorderAmount = 0;
+        this.reserveAmount = 0;
+    }
+
+    public void load(double quantity) {
+        availableAmount += quantity;
+        backorderAmount = Math.max(backorderAmount - quantity, 0);
     }
 
     public void unload(double quantity) {
-        backordered -= quantity;
-        available += quantity;
+        availableAmount -= quantity;
+        reserveAmount = Math.max(reserveAmount - quantity, 0);
+    }
+
+    public void reserve(double quantity) {
+        reserveAmount += quantity;
     }
 
     public void backorder(double quantity) {
-        backordered += quantity;
+        backorderAmount += quantity;
+    }
+
+    public double getNeededReplenishment(double quantity) {
+        double nowAndWillAmount = availableAmount + backorderAmount - reserveAmount;
+
+        if (nowAndWillAmount >= quantity) return 0;
+        else return quantity - nowAndWillAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Inventory [" + product.toString() + "]: " +
+                "available: " + availableAmount + ", " +
+                "backorder: " + backorderAmount + ", " +
+                "reserve: "   + reserveAmount;
     }
 }

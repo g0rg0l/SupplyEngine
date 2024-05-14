@@ -6,6 +6,13 @@ import self.simulation.products.Product;
 
 public class DemandGenerator {
 
+    public DemandGenerator(DemandGenerator that) {
+        this.orderCreationTime = that.orderCreationTime;
+        this.product = that.product;
+        this.quantity = that.quantity;
+        this.time = 0;
+    }
+
     @Getter
     @Setter
     private double orderCreationTime;

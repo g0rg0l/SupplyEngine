@@ -43,7 +43,7 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
 
         JPanel demandQuantityPanel = new JPanel();
         demandQuantityPanel.setLayout(new FlowLayout());
-        JLabel demandQuantityLabel = new JLabel("Request Amount: ");
+        JLabel demandQuantityLabel = new JLabel("Request Amount (unit): ");
         demandQuantityPanel.add(demandQuantityLabel);
         quantityInput = new JTextField(10);
         quantityInput.setText(String.valueOf(facility.getDemandQuantityParameter()));
@@ -56,7 +56,7 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
 
         JPanel demandGenerationPanel = new JPanel();
         demandGenerationPanel.setLayout(new FlowLayout());
-        JLabel demandLabel = new JLabel("Demand Period: ");
+        JLabel demandLabel = new JLabel("Demand Period (sec.): ");
         demandGenerationPanel.add(demandLabel);
         demandInput = new JTextField(10);
         demandInput.setText(String.valueOf(facility.getDemandPeriodParameter()));

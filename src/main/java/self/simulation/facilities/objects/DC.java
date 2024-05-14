@@ -1,10 +1,8 @@
 package self.simulation.facilities.objects;
 
 import lombok.Getter;
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.map.AGISMap;
-import self.simulation.RouteMovable;
 import self.simulation.demand.Order;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityFactory;
@@ -12,14 +10,14 @@ import self.simulation.facilities.FacilityType;
 import self.simulation.facilities.IUpdatable;
 import self.simulation.inventories.Inventory;
 import self.simulation.products.Product;
+import self.simulation.shipments.Shipment;
+import self.simulation.sourcing.SourcingManager;
+import self.utility.SimulationConfiguration;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
-public class DC extends Facility implements IUpdatable {
-    private final Queue<Order> incomingOrdersQueue;
+public class DC extends Facility implements IUpdatable, ISourceFacility, IDestinationFacility {
+    private final List<Order> waitingOrders;
 
     @Getter
     private final Map<Product, Inventory> inventories;
@@ -33,29 +31,94 @@ public class DC extends Facility implements IUpdatable {
                 map
         );
 
-        this.incomingOrdersQueue = new PriorityQueue<>((Order o1, Order o2) -> 0);
+        this.waitingOrders = new ArrayList<>();
         this.inventories = new HashMap<>();
     }
 
     public DC(Facility that) {
         super(that);
-        this.incomingOrdersQueue = ((DC) that).incomingOrdersQueue;
-        this.inventories = ((DC) that).inventories;
-    }
-
-    public void processOrder(Order order) {
-        incomingOrdersQueue.add(order);
+        this.waitingOrders = new ArrayList<>(((DC) that).waitingOrders);
+        this.inventories = new HashMap<>();
+        for (Map.Entry<Product, Inventory> entry : ((DC) that).inventories.entrySet()) {
+            this.inventories.put(entry.getKey(), new Inventory(entry.getValue()));
+        }
     }
 
     @Override
     public void update(float dt) {
-        while (!incomingOrdersQueue.isEmpty()) {
-            var order = incomingOrdersQueue.poll();
+        System.out.println(inventories.get(SimulationConfiguration.INSTANCE.getProducts().get(0)));
+    }
+
+    private void sendShipmentByOrder(Order order) {
+        Shipment shipment = new Shipment(order);
+        order.getRoute().move(shipment, order.getRoute().fromID == id);
+    }
+
+    private void backorderByOrder(Order order) {
+        var inventory = inventories.get(order.getProduct());
+
+        if (inventory != null) {
+            double toBackorder = inventory.getNeededReplenishment(order.getQuantity());
+
+            var outgointOrder = new Order();
+            outgointOrder.setQuantity(toBackorder);
+            outgointOrder.setProduct(order.getProduct());
+            outgointOrder.setDestination(this);
+
+            var source = SourcingManager.INSTANCE.getSource(outgointOrder);
+
+            if (source != null) {
+                outgointOrder.setSource(source);
+                SourcingManager.INSTANCE.initPath(outgointOrder);
+
+                inventory.backorder(toBackorder);
+                inventory.reserve(order.getQuantity());
+                source.processOrder(outgointOrder);
+            }
+        }
+    }
+
+    private void updateWaitingOrders(Product product) {
+        var ordersToUpdate = waitingOrders.stream().filter(o -> o.getProduct().equals(product)).toList();
+        var inventory = inventories.get(product);
+
+        var toRemove = new ArrayList<Order>();
+        for (Order order : ordersToUpdate) {
+            if (inventory.getAvailableAmount() >= order.getQuantity()) {
+                inventory.unload(order.getQuantity());
+                toRemove.add(order);
+            }
+        }
+
+        for (Order order : toRemove) {
+            waitingOrders.remove(order);
             sendShipmentByOrder(order);
         }
     }
 
-    private void sendShipmentByOrder(Order order) {
-        order.getRoute().move(new RouteMovable(), order.getRoute().fromID == id);
+    @Override
+    public void processOrder(Order order) {
+        var inventory = inventories.get(order.getProduct());
+        if (inventory == null) return;
+
+        if (inventory.getNeededReplenishment(order.getQuantity()) == 0) {
+            inventory.unload(order.getQuantity());
+            sendShipmentByOrder(order);
+        }
+        else {
+            backorderByOrder(order);
+            waitingOrders.add(order);
+        }
+    }
+
+    @Override
+    public void processShipment(Shipment shipment) {
+        var order = shipment.getOrder();
+        var inventory = inventories.get(order.getProduct());
+
+        if (inventory != null) {
+            inventory.load(order.getQuantity());
+            updateWaitingOrders(order.getProduct());
+        }
     }
 }

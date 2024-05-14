@@ -22,4 +22,12 @@ public class Product {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof Product)) return false;
+
+        return ((Product) obj).getName().equals(name);
+    }
 }

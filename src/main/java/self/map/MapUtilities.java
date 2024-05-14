@@ -1,5 +1,7 @@
 package self.map;
 
+import org.jxmapviewer.viewer.GeoPosition;
+
 public class MapUtilities {
     public static final double EARTH_RADIUS = 6371;
 
@@ -30,6 +32,13 @@ public class MapUtilities {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return EARTH_RADIUS * c * 1000;
+    }
+
+    public static double calculateDistanceByHaversine(GeoPosition from, GeoPosition to) {
+        return calculateDistanceByHaversine(
+                from.getLatitude(), from.getLongitude(),
+                to.getLatitude(), to.getLongitude()
+        );
     }
 
     public static int getGapForZoomLevel(int zoom) {

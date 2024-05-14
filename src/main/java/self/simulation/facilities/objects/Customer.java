@@ -10,10 +10,11 @@ import self.simulation.facilities.FacilityFactory;
 import self.simulation.facilities.FacilityType;
 import self.simulation.facilities.IUpdatable;
 import self.simulation.products.Product;
+import self.simulation.shipments.Shipment;
 import self.simulation.sourcing.SourcingManager;
 import self.simulation.sourcing.SourcingType;
 
-public class Customer extends Facility implements IUpdatable {
+public class Customer extends Facility implements IUpdatable, IDestinationFacility {
     private final DemandGenerator demandGenerator;
 
     @Getter
@@ -35,7 +36,7 @@ public class Customer extends Facility implements IUpdatable {
 
     public Customer(Facility that) {
         super(that);
-        this.demandGenerator = ((Customer) that).demandGenerator;
+        this.demandGenerator = new DemandGenerator(((Customer) that).demandGenerator);
         this.sourcingType = ((Customer) that).sourcingType;
     }
 
@@ -49,13 +50,18 @@ public class Customer extends Facility implements IUpdatable {
             order.setProduct(demandGenerator.getProduct());
             order.setQuantity(demandGenerator.getQuantity());
 
-            DC source = SourcingManager.INSTANCE.getSource(order);
+            var source = SourcingManager.INSTANCE.getSource(order);
             if (source != null) {
                 order.setSource(source);
                 SourcingManager.INSTANCE.initPath(order);
                 source.processOrder(order);
             }
         }
+    }
+
+    @Override
+    public void processShipment(Shipment shipment) {
+        System.out.println("Client received shipment.");
     }
 
     public void setDemandPeriodParameter(double orderCreationTime) {

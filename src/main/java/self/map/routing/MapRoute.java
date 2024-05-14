@@ -138,7 +138,11 @@ public class MapRoute {
                 finished.add(movable);
             }
         }
-        movables.removeAll(finished);
+
+        finished.forEach(m -> {
+            m.arrival();
+            movables.remove(m);
+        });
     }
 
     /**
