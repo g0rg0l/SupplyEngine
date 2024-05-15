@@ -46,7 +46,7 @@ public class DC extends Facility implements IUpdatable, ISourceFacility, IDestin
 
     @Override
     public void update(float dt) {
-        System.out.println(inventories.get(SimulationConfiguration.INSTANCE.getProducts().get(0)));
+
     }
 
     private void sendShipmentByOrder(Order order) {

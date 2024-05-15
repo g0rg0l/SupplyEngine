@@ -61,7 +61,7 @@ public class Customer extends Facility implements IUpdatable, IDestinationFacili
 
     @Override
     public void processShipment(Shipment shipment) {
-        System.out.println("Client received shipment.");
+
     }
 
     public void setDemandPeriodParameter(double orderCreationTime) {

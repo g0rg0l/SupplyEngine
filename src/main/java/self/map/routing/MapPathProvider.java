@@ -45,11 +45,11 @@ public class MapPathProvider {
         path.getPoints().forEach(p -> points.add(new GeoPosition(p.getLat(), p.getLon())));
 
         double userVehicleSpeedInKilometersInHour = SimulationConfiguration.INSTANCE.getVehicleSpeed();
-        long vehicleSpeedInMetersInSecond = (long) (userVehicleSpeedInKilometersInHour * 3.6);
+        double vehicleSpeedInMetersInSecond = userVehicleSpeedInKilometersInHour / 3.6;
 
         return new Path(
                 path.getDistance(),
-                (long) (path.getDistance() / vehicleSpeedInMetersInSecond),
+                path.getDistance() / vehicleSpeedInMetersInSecond,
                 points
         );
     }

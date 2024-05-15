@@ -23,7 +23,7 @@ public class MapRoute {
 
     @Getter
     @Setter
-    private long originalTime;
+    private double originalTime;
 
     @Getter
     private final List<RouteMovable> movables;
