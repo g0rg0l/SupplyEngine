@@ -7,12 +7,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ProductsPropertiesPanel extends PropertiesPanel {
     private final Object[] HEADER = { "Name", "Unit", "CPU", "Cost Unit" };
 
     public ProductsPropertiesPanel() {
         super();
+        setup();
+    }
+
+    private void setup() {
+
     }
 
     @Override
@@ -32,12 +39,14 @@ public class ProductsPropertiesPanel extends PropertiesPanel {
         removeAll();
 
         setLayout(new FlowLayout());
-        JTable table = new JTable(data, HEADER);
+        var table = new CustomTable(data, HEADER, this);
+        table.setCellEditor(new DefaultCellEditor(new JTextField()));
         table.setFillsViewportHeight(true);
         JPanel jpanel = new JPanel();
         jpanel.setLayout(new BorderLayout());
         jpanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
         jpanel.add(table, BorderLayout.CENTER);
+
         add(jpanel);
 
         JPanel buttonsPanel = new JPanel();

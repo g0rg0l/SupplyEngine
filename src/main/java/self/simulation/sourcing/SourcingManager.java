@@ -7,6 +7,7 @@ import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityManager;
 import self.simulation.facilities.objects.Customer;
 import self.simulation.facilities.objects.DC;
+import self.simulation.facilities.objects.Factory;
 import self.simulation.facilities.objects.ISourceFacility;
 
 import java.util.Comparator;
@@ -68,7 +69,11 @@ public class SourcingManager {
                 default -> { return null; }
             }
         }
-        else if (order.getDestination() instanceof DC destination) {
+        else {
+            var destination = order.getDestination() instanceof DC
+                    ? (DC) order.getDestination()
+                    : (Factory) order.getDestination();
+
             var supplierToReplenish = facilityManager.getSuppliers()
                     .stream()
                     .filter(s -> routeManager.getRouteBetween(destination, s) != null)
@@ -95,10 +100,22 @@ public class SourcingManager {
                     })
                     .orElse(null);
 
-            return DCToReplenish;
-        }
+            if (DCToReplenish != null) return DCToReplenish;
 
-        return null;
+            var factoriesToReplenish = facilityManager.getFactories()
+                    .stream()
+                    .filter(s -> routeManager.getRouteBetween(destination, s) != null)
+                    .filter(s -> s.canCreate(order.getProduct()))
+                    .min((s1, s2) -> {
+                        var timeToTravelToS1 = routeManager.getRouteBetween(destination, s1).getOriginalTime();
+                        var timeToTravelToS2 = routeManager.getRouteBetween(destination, s2).getOriginalTime();
+
+                        return Double.compare(timeToTravelToS1, timeToTravelToS2);
+                    })
+                    .orElse(null);
+
+            return factoriesToReplenish;
+        }
     }
 
     public void initPath(Order order) {

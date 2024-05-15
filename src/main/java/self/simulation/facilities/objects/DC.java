@@ -12,7 +12,6 @@ import self.simulation.inventories.Inventory;
 import self.simulation.products.Product;
 import self.simulation.shipments.Shipment;
 import self.simulation.sourcing.SourcingManager;
-import self.utility.SimulationConfiguration;
 
 import java.util.*;
 
