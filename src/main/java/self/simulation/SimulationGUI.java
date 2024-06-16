@@ -106,10 +106,24 @@ public class SimulationGUI {
 
         menu.add(speedPanel, BorderLayout.CENTER);
 
+        var rightButtonsPanel = new JPanel();
+        rightButtonsPanel.setLayout(new FlowLayout());
+
+        rightButtonsPanel.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(0, 0, 0, 0),
+                        BorderFactory.createEmptyBorder(5, 0, 0, 0)
+                )
+        );
+
         try {
-            menu.add(new ApplicationButton(
+            rightButtonsPanel.add(new ApplicationButton(
+                    ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/show statistics button.png"))),
+                    simulation, "open statistics frame"));
+
+            rightButtonsPanel.add(new ApplicationButton(
                     ImageIO.read(Objects.requireNonNull(getClass().getResource("/ui/stop_button.png"))),
-                    simulation, "close simulation"), BorderLayout.LINE_END);
+                    simulation, "close simulation"));
         }
         catch (Exception exception) {
             System.out.println("Error while loading resources: can not load button icons.");
@@ -117,6 +131,7 @@ public class SimulationGUI {
         }
 
         menu.add(buttonsPanel, BorderLayout.LINE_START);
+        menu.add(rightButtonsPanel, BorderLayout.LINE_END);
 
         pane.add(menu, BorderLayout.PAGE_END);
     }

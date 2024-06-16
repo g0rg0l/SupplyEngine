@@ -10,16 +10,13 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class ApplicationAddController {
-    private final Application application;
     private ApplicationGISMap map;
     private FacilityType addingType;
     private boolean isAddingRoute;
     private Facility a = null;
     private Facility b = null;
 
-    public ApplicationAddController(Application application) {
-        this.application = application;
-    }
+    public ApplicationAddController(Application application) {  }
 
     public void selectFacility(FacilityType type) {
         addingType = type;

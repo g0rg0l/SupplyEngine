@@ -1,5 +1,6 @@
 package self.simulation.facilities;
 
+import lombok.Getter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import self.application.ui.ApplicationButton;
@@ -14,11 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Facility {
+    @Getter
     private final BufferedImage image;
     private final BufferedImage selectedImage;
+    @Getter
     private final GeoPosition geoPosition;
     private final Map<Integer, Point2D> pointsDetalizationMap;
     public final int id;
+    @Getter
     protected PropertiesPanel propertiesPanel;
     public boolean selected;
 
@@ -56,20 +60,8 @@ public class Facility {
         return pointsDetalizationMap.get(zoom);
     }
 
-    public GeoPosition getGeoPosition() {
-        return geoPosition;
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
     public void setPropertiesPanel(PropertiesPanel propertiesPanel) {
         this.propertiesPanel = propertiesPanel;
-    }
-
-    public PropertiesPanel getPropertiesPanel() {
-        return propertiesPanel;
     }
 
     private void init(AGISMap map) {

@@ -15,8 +15,7 @@ import java.util.*;
 import java.util.List;
 
 public class MapRoute {
-    public final int fromID;
-    public final int toID;
+    public final int fromID; public final int toID;
 
     @Getter
     private final double originalDistance;

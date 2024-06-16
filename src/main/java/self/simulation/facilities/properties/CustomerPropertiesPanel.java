@@ -14,6 +14,7 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
     private final Customer facility;
     private JTextField demandInput;
     private JTextField quantityInput;
+    private JTextField expectedLeadTimeInput;
     private JComboBox<String> sourcingPolicyInput;
     private JPanel productPanel;
     private JComboBox<Product> productCombobox;
@@ -67,6 +68,19 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
         demandGenerationPanel.add(saveDemandButton);
         add(demandGenerationPanel);
 
+        JPanel expectedLeadTimePanel = new JPanel();
+        expectedLeadTimePanel.setLayout(new FlowLayout());
+        JLabel expectedLeadTimeLabel = new JLabel("Expected Lead Time (sec): ");
+        expectedLeadTimePanel.add(expectedLeadTimeLabel);
+        expectedLeadTimeInput = new JTextField(10);
+        expectedLeadTimeInput.setText(String.valueOf(facility.getExpectedLeadTimeParameter()));
+        expectedLeadTimePanel.add(expectedLeadTimeInput);
+        JButton saveExpectedLeadTimeButton = new JButton("save");
+        saveExpectedLeadTimeButton.setActionCommand("update expected lead time command");
+        saveExpectedLeadTimeButton.addActionListener(this);
+        expectedLeadTimePanel.add(saveExpectedLeadTimeButton);
+        add(expectedLeadTimePanel);
+
         JPanel sourcingPolicyPanel = new JPanel();
         sourcingPolicyPanel.setLayout(new FlowLayout());
         JLabel sourcingLabel = new JLabel("Sourcing policy:");
@@ -97,11 +111,16 @@ public class CustomerPropertiesPanel extends PropertiesPanel {
         if (e.getActionCommand().equals("update quantity command")) {
             facility.setDemandQuantityParameter(Double.parseDouble(quantityInput.getText()));
         }
+        if (e.getActionCommand().equals("update expected lead time command")) {
+            facility.setExpectedLeadTimeParameter(Double.parseDouble(expectedLeadTimeInput.getText()));
+        }
     }
 
     @Override
     public void open() {
         demandInput.setText(String.valueOf(facility.getDemandPeriodParameter()));
+        quantityInput.setText(String.valueOf(facility.getDemandQuantityParameter()));
+        expectedLeadTimeInput.setText(String.valueOf(facility.getExpectedLeadTimeParameter()));
 
         remove(productPanel);
         productPanel = new JPanel();

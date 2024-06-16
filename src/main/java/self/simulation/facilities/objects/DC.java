@@ -12,6 +12,7 @@ import self.simulation.inventories.Inventory;
 import self.simulation.products.Product;
 import self.simulation.shipments.Shipment;
 import self.simulation.sourcing.SourcingManager;
+import self.statistics.Statistics;
 
 import java.util.*;
 
@@ -73,6 +74,7 @@ public class DC extends Facility implements IUpdatable, ISourceFacility, IDestin
                 inventory.backorder(toBackorder);
                 inventory.reserve(order.getQuantity());
                 source.processOrder(outgointOrder);
+                Statistics.addProductsBacklogValue(toBackorder);
             }
         }
     }
@@ -118,6 +120,7 @@ public class DC extends Facility implements IUpdatable, ISourceFacility, IDestin
         if (inventory != null) {
             inventory.load(order.getQuantity());
             updateWaitingOrders(order.getProduct());
+            Statistics.addProductsBacklogValue(-order.getQuantity());
         }
     }
 }

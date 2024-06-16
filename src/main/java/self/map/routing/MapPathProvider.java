@@ -27,7 +27,7 @@ public class MapPathProvider {
         hopper.setGraphHopperLocation("target/routing-graph-cache");
         hopper.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
         hopper.getCHPreparationHandler().setCHProfiles(new CHProfile("car"));
-        hopper.setOSMFile("C:\\SupplyEngine\\src\\main\\resources\\osm\\norway-latest.osm.pbf");
+        hopper.setOSMFile("C:\\SupplyEngine\\src\\main\\resources\\osm\\central-fed-district-latest.osm.pbf");
         hopper.importOrLoad();
     }
 

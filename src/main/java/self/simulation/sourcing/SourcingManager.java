@@ -5,10 +5,8 @@ import self.map.routing.RouteManager;
 import self.simulation.demand.Order;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityManager;
-import self.simulation.facilities.objects.Customer;
-import self.simulation.facilities.objects.DC;
-import self.simulation.facilities.objects.Factory;
-import self.simulation.facilities.objects.ISourceFacility;
+import self.simulation.facilities.objects.*;
+import self.simulation.products.Product;
 
 import java.util.Comparator;
 

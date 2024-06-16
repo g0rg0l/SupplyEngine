@@ -19,6 +19,7 @@ import java.util.List;
 
 public class Factory extends Facility implements IUpdatable, ISourceFacility, IDestinationFacility {
     private final Map<Order, Order> backorderToWaitingOrder;
+    private final List<Order> fakes;
 
     @Getter
     private final Map<Product, Set<Product>> convertibles;
@@ -35,6 +36,7 @@ public class Factory extends Facility implements IUpdatable, ISourceFacility, ID
                 map
         );
         this.backorderToWaitingOrder = new HashMap<>();
+        this.fakes = new ArrayList<>();
         this.coefficients = new HashMap<>();
         this.convertibles = new HashMap<>();
     }
@@ -44,6 +46,7 @@ public class Factory extends Facility implements IUpdatable, ISourceFacility, ID
         this.backorderToWaitingOrder = new HashMap<>();
         this.convertibles = ((Factory) that).convertibles;
         this.coefficients = ((Factory) that).coefficients;
+        this.fakes = ((Factory) that).fakes;
     }
 
     @Override
@@ -58,9 +61,11 @@ public class Factory extends Facility implements IUpdatable, ISourceFacility, ID
 
     @Override
     public void processShipment(Shipment shipment) {
-        var orderToComplete = backorderToWaitingOrder.get(shipment.getOrder());
-        sendShipmentByOrder(orderToComplete);
-        backorderToWaitingOrder.remove(shipment.getOrder());
+        if (!fakes.contains(shipment.getOrder())) {
+            var orderToComplete = backorderToWaitingOrder.get(shipment.getOrder());
+            sendShipmentByOrder(orderToComplete);
+            backorderToWaitingOrder.remove(shipment.getOrder());
+        } else fakes.remove(shipment.getOrder());
     }
 
     @Override

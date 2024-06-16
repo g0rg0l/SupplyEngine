@@ -8,14 +8,11 @@ import java.awt.geom.Point2D;
 import java.util.ListIterator;
 
 public abstract class RouteMovable {
-    private Point2D currentPosition;
-    private Point2D targetPosition;
+    private Point2D currentPosition; private Point2D targetPosition;
     private ListIterator<Point2D> next;
     private MapRoute route;
-    private double time;
-    private double speed;
-    private boolean isStraight;
-    private boolean isFinished;
+    private double time; private double speed;
+    private boolean isStraight; private boolean isFinished;
 
     public abstract void arrival();
 

@@ -3,7 +3,9 @@ package self.simulation.facilities.objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.jxmapviewer.viewer.GeoPosition;
+import self.engine.TimeManager;
 import self.map.AGISMap;
+import self.map.routing.MapRoute;
 import self.simulation.demand.DemandGenerator;
 import self.simulation.facilities.Facility;
 import self.simulation.facilities.FacilityFactory;
@@ -13,6 +15,9 @@ import self.simulation.products.Product;
 import self.simulation.shipments.Shipment;
 import self.simulation.sourcing.SourcingManager;
 import self.simulation.sourcing.SourcingType;
+import self.statistics.Statistics;
+
+import java.util.Date;
 
 public class Customer extends Facility implements IUpdatable, IDestinationFacility {
     private final DemandGenerator demandGenerator;
@@ -30,7 +35,7 @@ public class Customer extends Facility implements IUpdatable, IDestinationFacili
                 map
         );
 
-        this.demandGenerator = new DemandGenerator(24 * 60 * 60);
+        this.demandGenerator = new DemandGenerator();
         this.sourcingType = SourcingType.CLOSEST;
     }
 
@@ -46,8 +51,11 @@ public class Customer extends Facility implements IUpdatable, IDestinationFacili
 
         var order = demandGenerator.getOrder();
         if (order != null) {
+            Statistics.addCustomerOrdersCountValue(1);
+            order.setModelSecondsCreated(TimeManager.timeManager.modelSeconds());
             order.setDestination(this);
             order.setProduct(demandGenerator.getProduct());
+            order.setExpectedLeadTime(demandGenerator.getExpectedLeadTime());
             order.setQuantity(demandGenerator.getQuantity());
 
             var source = SourcingManager.INSTANCE.getSource(order);
@@ -61,7 +69,18 @@ public class Customer extends Facility implements IUpdatable, IDestinationFacili
 
     @Override
     public void processShipment(Shipment shipment) {
+        MapRoute route = shipment.getOrder().getRoute();
+        double routeTimeInSeconds = route.getOriginalTime();
+        double routeTimeInMinutes = routeTimeInSeconds / 60.0;
+        Statistics.addDeliverTimeValue(routeTimeInMinutes);
 
+        double deliveredModelSeconds = TimeManager.timeManager.modelSeconds();
+        double createdModelSeconds = shipment.getOrder().getModelSecondsCreated();
+        double leadTimeInSeconds = deliveredModelSeconds - createdModelSeconds;
+        Statistics.addLeadTimeValue(leadTimeInSeconds);
+
+        Statistics.addServiceLevelByOrdersValue(shipment.getOrder(), leadTimeInSeconds);
+        Statistics.addProfit(shipment.getOrder().getQuantity() * Double.parseDouble(shipment.getOrder().getProduct().getCost()));
     }
 
     public void setDemandPeriodParameter(double orderCreationTime) {
@@ -86,5 +105,13 @@ public class Customer extends Facility implements IUpdatable, IDestinationFacili
 
     public double getDemandQuantityParameter() {
         return demandGenerator.getQuantity();
+    }
+
+    public void setExpectedLeadTimeParameter(double expectedLeadTime) {
+        demandGenerator.setExpectedLeadTime(expectedLeadTime);
+    }
+
+    public double getExpectedLeadTimeParameter() {
+        return demandGenerator.getExpectedLeadTime();
     }
 }

@@ -12,6 +12,7 @@ import self.simulation.facilities.IUpdatable;
 import self.simulation.inventories.Inventory;
 import self.simulation.products.Product;
 import self.simulation.shipments.Shipment;
+import self.statistics.Statistics;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -64,5 +65,7 @@ public class Supplier extends Facility implements IUpdatable, ISourceFacility {
     private void sendShipmentByOrder(Order order) {
         Shipment shipment = new Shipment(order);
         order.getRoute().move(shipment, order.getRoute().fromID == id);
+
+        Statistics.addLoss(order.getQuantity() * Double.parseDouble(order.getProduct().getCost()));
     }
 }

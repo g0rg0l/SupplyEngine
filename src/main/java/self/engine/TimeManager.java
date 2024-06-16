@@ -1,16 +1,21 @@
 package self.engine;
 
 import self.simulation.facilities.IUpdatable;
+import self.statistics.Statistics;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class TimeManager implements IUpdatable {
-    private double seconds = 0;
+    public static TimeManager timeManager;
+
+    private double seconds;
+    private double modelSeconds;
     private LocalDateTime dateTime = LocalDateTime.of(2024, 1, 1, 0, 0, 0, 0);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E  dd.MM.yyyy HH:mm:ss", Locale.ENGLISH);
     private final Map<String, Float> speeds = new HashMap<>();
@@ -36,10 +41,33 @@ public class TimeManager implements IUpdatable {
         speeds.put("12h", 43200.f);
         speeds.put("1d", 86400.f);
         speeds.put("7d", 604800.f);
+
+        Statistics.timeManager = this;
+        TimeManager.timeManager = this;
     }
 
-    public LocalDateTime date() {
+    public LocalDateTime dateTime() {
         return dateTime;
+    }
+
+    public Date date() {
+        return Date.from(dateTime().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public double modelDays() {
+        return modelSeconds / 84600.0;
+    }
+
+    public double modelHours() {
+        return modelSeconds / 3600.0;
+    }
+
+    public double modelMinutes() {
+        return modelSeconds / 60.0;
+    }
+
+    public double modelSeconds() {
+        return modelSeconds;
     }
 
     public String format(LocalDateTime date) {
@@ -77,7 +105,9 @@ public class TimeManager implements IUpdatable {
 
     @Override
     public void update(float dt) {
+
         seconds += dt;
+        modelSeconds += dt;
 
         if (seconds >= 1) {
             int shift = (int) seconds;

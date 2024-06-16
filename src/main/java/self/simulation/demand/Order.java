@@ -7,6 +7,8 @@ import self.simulation.facilities.objects.IDestinationFacility;
 import self.simulation.facilities.objects.ISourceFacility;
 import self.simulation.products.Product;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class Order {
@@ -20,4 +22,8 @@ public class Order {
     private Product product;
 
     private double quantity;
+
+    private double expectedLeadTime;
+
+    private double modelSecondsCreated;
 }

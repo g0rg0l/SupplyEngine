@@ -1,17 +1,16 @@
 package self.map;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class AManager<T> {
     protected List<T> objects;
 
     public AManager() {
         this.objects = new ArrayList<>();
-    }
-
-    public List<T> getObjects() {
-        return objects;
     }
 
     public void setObjects(List<T> objects) {

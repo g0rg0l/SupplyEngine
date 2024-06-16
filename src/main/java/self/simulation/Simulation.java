@@ -3,6 +3,8 @@ package self.simulation;
 import self.engine.Engine;
 import self.engine.TimeManager;
 import self.simulation.sourcing.SourcingManager;
+import self.statistics.StatisticsFrame;
+import self.statistics.StatisticsManager;
 import self.utility.SimulationConfiguration;
 
 import static self.utility.Preferences.*;
@@ -18,21 +20,25 @@ public class Simulation extends JFrame implements ActionListener {
     private SimulationGISMap map;
     private final SimulationGUI gui;
     private final TimeManager timeManager;
+    private JFrame statisticsFrame;
+    private final StatisticsManager statisticsManager;
     private boolean isRunning;
 
     public Simulation() {
         super("Simulation");
 
         this.engine = new Engine();
-        this.gui = new SimulationGUI(this);
         this.timeManager = new TimeManager();
+        this.gui = new SimulationGUI(this);
+        this.statisticsFrame = null;
         this.isRunning = false;
+        this.statisticsManager = new StatisticsManager();
 
         createAndShowGUI();
     }
 
     public void staticUpdate() {
-        gui.updateDate(timeManager.format(timeManager.date()));
+        gui.updateDate(timeManager.format(timeManager.dateTime()));
     }
 
     public void update(float dt) {
@@ -119,6 +125,15 @@ public class Simulation extends JFrame implements ActionListener {
         else if ("close simulation".equals(command)) {
             stop();
             dispose();
+        }
+        else if ("open statistics frame".equals(command)) {
+            if (statisticsFrame != null) statisticsFrame.dispose();
+
+            statisticsFrame = new JFrame("Statistics Observation");
+            statisticsFrame.add(statisticsManager);
+            statisticsFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            statisticsFrame.setVisible(true);
+            statisticsFrame.pack();
         }
     }
 }

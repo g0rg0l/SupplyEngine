@@ -6,10 +6,20 @@ import self.simulation.products.Product;
 
 public class DemandGenerator {
 
+    public DemandGenerator() {
+        this.orderCreationTime = 84600.0;
+        this.product = null;
+        this.quantity = 0;
+        this.expectedLeadTime = 84600.0;
+        this.time = 0;
+    }
+
+
     public DemandGenerator(DemandGenerator that) {
         this.orderCreationTime = that.orderCreationTime;
         this.product = that.product;
         this.quantity = that.quantity;
+        this.expectedLeadTime = that.expectedLeadTime;
         this.time = 0;
     }
 
@@ -25,11 +35,11 @@ public class DemandGenerator {
     @Setter
     private double quantity;
 
-    private double time;
+    @Getter
+    @Setter
+    private double expectedLeadTime;
 
-    public DemandGenerator(double orderCreationTime) {
-        this.orderCreationTime = orderCreationTime;
-    }
+    private double time;
 
     public void update(float dt) {
         time += dt;
